@@ -28,16 +28,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Header.
         header = Header(self)
-        main_layout.addWidget(header, 0, QtCore.Qt.AlignTop)
+        main_layout.addWidget(header, QtCore.Qt.AlignTop)
 
         # Main body.
         gis_frame = GISFrame(self)
-        main_layout.addWidget(gis_frame, 0, QtCore.Qt.AlignTop)
+        main_layout.addWidget(gis_frame, QtCore.Qt.AlignTop)
 
         # Footer.
         footer_frame = QtWidgets.QFrame(self)
-        footer_frame.setStyleSheet("background-color:blue;")
-        main_layout.addWidget(footer_frame, 0, QtCore.Qt.AlignBottom)
+        footer_frame.setFixedHeight(30)
+        footer_frame.setStyleSheet("background-color:#cbaf87;")
+        main_layout.addWidget(footer_frame, QtCore.Qt.AlignTop)
         footer_layout = QtWidgets.QHBoxLayout()
         footer_layout.setSpacing(0)
         footer_layout.setContentsMargins(0, 0, 0, 0)

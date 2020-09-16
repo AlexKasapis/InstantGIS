@@ -16,6 +16,7 @@ class Header(QtWidgets.QFrame):
         self.is_mouse_pressed = False
         self.mouse_pos = (0, 0)
 
+        self.setFixedHeight(45)
         self.setStyleSheet("background-color:#cbaf87;")
 
         # Layout
