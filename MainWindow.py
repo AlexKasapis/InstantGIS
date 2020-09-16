@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from Header import Header
 from GISFrame import GISFrame
+from Footer import Footer
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -35,15 +36,5 @@ class MainWindow(QtWidgets.QMainWindow):
         main_layout.addWidget(gis_frame, QtCore.Qt.AlignTop)
 
         # Footer.
-        footer_frame = QtWidgets.QFrame(self)
-        footer_frame.setFixedHeight(30)
-        footer_frame.setStyleSheet("background-color:#cbaf87;")
-        main_layout.addWidget(footer_frame, QtCore.Qt.AlignTop)
-        footer_layout = QtWidgets.QHBoxLayout()
-        footer_layout.setSpacing(0)
-        footer_layout.setContentsMargins(0, 0, 0, 0)
-        footer_frame.setLayout(footer_layout)
-
-        close_button2 = QtWidgets.QPushButton("Close", self)
-        close_button2.resize(100, 100)
-        footer_layout.addWidget(close_button2, 0, QtCore.Qt.AlignLeft)
+        footer = Footer(self)
+        main_layout.addWidget(footer, QtCore.Qt.AlignTop)
