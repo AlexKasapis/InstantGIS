@@ -22,8 +22,6 @@ class MainWindow(QtWidgets.QMainWindow):
         main_layout.setSpacing(0)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_widget = QtWidgets.QWidget()
-        # main_widget.setStyleSheet("""
-        #     background-color: #30475e;""")
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
 
@@ -32,8 +30,30 @@ class MainWindow(QtWidgets.QMainWindow):
         main_layout.addWidget(header, QtCore.Qt.AlignTop)
 
         # Main body.
-        gis_frame = GISFrame(self)
-        main_layout.addWidget(gis_frame, QtCore.Qt.AlignTop)
+        center_widget = QtWidgets.QWidget(self)
+        center_layout = QtWidgets.QHBoxLayout()
+        center_widget.setLayout(center_layout)
+        center_layout.setSpacing(0)
+        center_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.addWidget(center_widget, QtCore.Qt.AlignTop)
+
+        # Main body -> Left bar.
+        left_bar = QtWidgets.QWidget(center_widget)
+        left_bar.setFixedWidth(3)
+        left_bar.setStyleSheet("""
+            background-color:#cbaf87;""")
+        center_layout.addWidget(left_bar, QtCore.Qt.AlignLeft)
+
+        # Main body -> GIS frame
+        gis_frame = GISFrame(center_widget)
+        center_layout.addWidget(gis_frame, QtCore.Qt.AlignLeft)
+
+        # Main body -> Right bar.
+        right_bar = QtWidgets.QWidget(center_widget)
+        right_bar.setFixedWidth(3)
+        right_bar.setStyleSheet("""
+            background-color:#cbaf87;""")
+        center_layout.addWidget(right_bar, QtCore.Qt.AlignLeft)
 
         # Footer.
         footer = Footer(self)
