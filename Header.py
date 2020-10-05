@@ -1,16 +1,19 @@
 import win32gui
 from PyQt5 import QtCore, QtWidgets
-from Buttons.NewPathPointButton import NewPathPointButton
-from Buttons.ProjectionAnchorButton import ProjectionAnchorButton
-from Buttons.LockDragButton import LockDragButton
-from Buttons.HelpButton import HelpButton
-from Buttons.MinimizeButton import MinimizeButton
-from Buttons.CloseButton import CloseButton
+from Components.Buttons.NewPathPointButton import NewPathPointButton
+from Components.Buttons.ProjectionAnchorButton import ProjectionAnchorButton
+from Components.Buttons.LockDragButton import LockDragButton
+from Components.Buttons.HelpButton import HelpButton
+from Components.Buttons.MinimizeButton import MinimizeButton
+from Components.Buttons.CloseButton import CloseButton
 
 
 class Header(QtWidgets.QFrame):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, main_ctrl, *args, **kwargs):
+        
+        self.main_ctrl = main_ctrl
+        
         QtWidgets.QFrame.__init__(self, *args, **kwargs)
 
         self.is_mouse_pressed = False
@@ -28,7 +31,7 @@ class Header(QtWidgets.QFrame):
         new_path_point_button = NewPathPointButton(self)
         header_layout.addWidget(new_path_point_button, 0, QtCore.Qt.AlignLeft)
 
-        projection_anchor_button = ProjectionAnchorButton(self)
+        projection_anchor_button = ProjectionAnchorButton(self.main_ctrl, parent=self)
         header_layout.addWidget(projection_anchor_button, 0, QtCore.Qt.AlignLeft)
 
         lock_drag_button = LockDragButton(self)
