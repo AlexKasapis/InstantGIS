@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtWidgets
 from Header import Header
 from GISFrame import GISFrame
-from Footer import Footer
 from Controllers.MainController import MainController
 
 
@@ -13,7 +12,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.model = model
         self.main_ctrl = main_ctrl
 
-        self.setWindowTitle("InstantGIS")
+        self.setWindowTitle('InstantGIS')
         self.setMinimumSize(QtCore.QSize(640, 480))
 
         # Make background transparent
@@ -43,9 +42,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Main body -> Left bar.
         left_bar = QtWidgets.QWidget(center_widget)
-        left_bar.setFixedWidth(3)
-        left_bar.setStyleSheet("""
-            background-color:#cbaf87;""")
+        left_bar.setFixedWidth(2)
+        left_bar.setStyleSheet('''
+            background-color: #323232;''')
         center_layout.addWidget(left_bar, QtCore.Qt.AlignLeft)
 
         # Main body -> GIS frame
@@ -54,11 +53,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Main body -> Right bar.
         right_bar = QtWidgets.QWidget(center_widget)
-        right_bar.setFixedWidth(3)
-        right_bar.setStyleSheet("""
-            background-color:#cbaf87;""")
+        right_bar.setFixedWidth(2)
+        right_bar.setStyleSheet('''
+            background-color: #323232;''')
         center_layout.addWidget(right_bar, QtCore.Qt.AlignLeft)
 
-        # Footer.
-        footer = Footer(self.main_ctrl, self.model, parent=self)
-        main_layout.addWidget(footer, QtCore.Qt.AlignTop)
+        # Footer bar.
+        footer_bar = QtWidgets.QWidget(center_widget)
+        footer_bar.setFixedHeight(2)
+        footer_bar.setStyleSheet('''
+            background-color: #323232;''')
+        main_layout.addWidget(footer_bar, QtCore.Qt.AlignTop)
