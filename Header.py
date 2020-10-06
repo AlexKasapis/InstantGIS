@@ -1,10 +1,8 @@
 import win32gui
 from PyQt5 import QtCore, QtWidgets
-from Components.Buttons.NewPathPointButton import NewPathPointButton
-from Components.Buttons.ProjectionAnchorButton import ProjectionAnchorButton
-from Components.Buttons.LockDragButton import LockDragButton
 from Components.Buttons.HelpButton import HelpButton
 from Components.Buttons.MinimizeButton import MinimizeButton
+from Components.Buttons.MaximizeButton import MaximizeButton
 from Components.Buttons.CloseButton import CloseButton
 
 
@@ -19,29 +17,29 @@ class Header(QtWidgets.QFrame):
         self.is_mouse_pressed = False
         self.mouse_pos = (0, 0)
 
-        self.setFixedHeight(45)
-        self.setStyleSheet("background-color:#cbaf87;")
+        self.setFixedHeight(30)
+        self.setStyleSheet('background-color: #323232;')
 
         # Layout
         header_layout = QtWidgets.QHBoxLayout()
-        header_layout.setSpacing(5)
-        header_layout.setContentsMargins(5, 2, 5, 2)
+        header_layout.setSpacing(0)
+        header_layout.setContentsMargins(10, 0, 0, 0)
         self.setLayout(header_layout)
 
-        new_path_point_button = NewPathPointButton(self)
-        header_layout.addWidget(new_path_point_button, 0, QtCore.Qt.AlignLeft)
+        title_label = QtWidgets.QLabel('InstantGIS')
+        title_label.setStyleSheet('''
+            color: #808080;
+            font-weight: 500''')
+        header_layout.addWidget(title_label, 1, QtCore.Qt.AlignLeft)
 
-        projection_anchor_button = ProjectionAnchorButton(self.main_ctrl, parent=self)
-        header_layout.addWidget(projection_anchor_button, 0, QtCore.Qt.AlignLeft)
-
-        lock_drag_button = LockDragButton(self)
-        header_layout.addWidget(lock_drag_button, 1, QtCore.Qt.AlignLeft)
-
-        help_button = HelpButton(self)
-        header_layout.addWidget(help_button, 0, QtCore.Qt.AlignLeft)
+        #help_button = HelpButton(self)
+        #header_layout.addWidget(help_button, 0, QtCore.Qt.AlignLeft)
 
         minimize_button = MinimizeButton(self)
         header_layout.addWidget(minimize_button, 0, QtCore.Qt.AlignLeft)
+
+        maximize_button = MaximizeButton(self)
+        header_layout.addWidget(maximize_button, 0, QtCore.Qt.AlignLeft)
 
         close_button = CloseButton(self)
         header_layout.addWidget(close_button, 0, QtCore.Qt.AlignLeft)
@@ -49,10 +47,6 @@ class Header(QtWidgets.QFrame):
     @staticmethod
     def close_button_click():
         QtCore.QCoreApplication.instance().quit()
-
-    @staticmethod
-    def add_point_button_click():
-        print("Add point button clicked.")
 
     def mousePressEvent(self, *args, **kwargs):
         self.is_mouse_pressed = True
