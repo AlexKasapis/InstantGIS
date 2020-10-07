@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from Components.CoordinateInput import CoordinateInput
+from Components.AnchorView import AnchorView
 
 class GISFrame(QtWidgets.QWidget):
 
@@ -21,9 +21,8 @@ class GISFrame(QtWidgets.QWidget):
         p.setColor(self.backgroundRole(), color)
         self.setPalette(p)
 
-
-        # Create the input form for latitude and longitude and display it
-        self.coord_input = CoordinateInput(self.main_ctrl, parent=self)
+        self.anchor_view1 = AnchorView(self.main_ctrl, self.model.anchor1, parent=self)
+        self.anchor_view2 = AnchorView(self.main_ctrl, self.model.anchor2, parent=self)
 
         self.model.subscribe_update_func(self.reset_frame)
 
@@ -31,9 +30,7 @@ class GISFrame(QtWidgets.QWidget):
         self.resetMap(True)
 
     def mousePressEvent(self, event):
-        if self.main_ctrl.adding_anchors_flag:
-            
-            self.coord_input.display(event.localPos())
+        self.main_ctrl.close_anchor_form()
         
 
     def resetMap(self, reset_path):
@@ -46,9 +43,9 @@ class GISFrame(QtWidgets.QWidget):
         pass
 
     def reset_frame(self):
-        if hasattr(self, 'coord_input'):
-            self.coord_input.reset()
-
+        self.anchor_view1.reset()
+        self.anchor_view2.reset()
+        
         self.redraw()
 
         

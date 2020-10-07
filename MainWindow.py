@@ -13,7 +13,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.main_ctrl = main_ctrl
 
         self.setWindowTitle('InstantGIS')
-        self.setMinimumSize(QtCore.QSize(640, 480))
+        self.setMinimumSize(QtCore.QSize(800, 600))
 
         # Make background transparent
         # self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
@@ -64,3 +64,7 @@ class MainWindow(QtWidgets.QMainWindow):
         footer_bar.setStyleSheet('''
             background-color: #323232;''')
         main_layout.addWidget(footer_bar, QtCore.Qt.AlignTop)
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Escape:
+            self.main_ctrl.close_anchor_form()
