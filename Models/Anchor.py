@@ -24,6 +24,7 @@ class Anchor(QtCore.QObject):
         self.modelChanged.emit()
 
     def update(self, coords=None, pos=None):
+        """ Updates either the coordinate or the position of the anchor """
         if coords is not None:
             self.lat = coords.x()
             self.long = coords.y()

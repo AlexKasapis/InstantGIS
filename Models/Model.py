@@ -15,8 +15,8 @@ class Model(object):
         
         self._update_funcs = []
         
-        self.anchor1 = Anchor(20, 520, -90, -180)
-        self.anchor2 = Anchor(750, 20, 90, 180)
+        self.anchor1 = Anchor(0, 0, 90, -180)
+        self.anchor2 = Anchor(0, 0, -90, 180)
 
         self.anchor1.modelChanged.connect(self.announce_update)
         self.anchor2.modelChanged.connect(self.announce_update)

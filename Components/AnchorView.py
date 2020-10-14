@@ -1,8 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class AnchorView(QtWidgets.QPushButton):
+    """ Displays one anchor point. The point can be dragged to change the xy
+        of the anchor. When clicked, an editable form is displayed that can be used
+        to edit the x, y, latitude and longitude of the anchor.
+    """
 
-    def __init__(self, main_ctrl, anchor_model, *args, **kwargs):
+    def __init__(self, anchor_model, *args, **kwargs):
         QtWidgets.QPushButton.__init__(self, *args, **kwargs)
 
         self.anchor_model = anchor_model
@@ -14,18 +18,20 @@ class AnchorView(QtWidgets.QPushButton):
                             border: 1px solid black
                             """)
 
+        self.setMouseTracking(True)
         self.clicked.connect(self.anchor_clicked_handle)
- 
+
 
     def anchor_clicked_handle(self):
+        """ When the anchor is clicked, if the form does not exist, create it and toggle it's visibility """
         if not hasattr(self, "anchor_form"):
             self.anchor_form = AnchorFormView(self.anchor_model, parent=self.parent())
             
         self.anchor_model.form_is_visible = not self.anchor_model.form_is_visible
 
     def mousePressEvent(self, event):
-        self.__mousePressPos = None
-        self.__mouseMovePos = None
+        self.__mousePressPos = None # the starting point of the cursor click
+        self.__mouseMovePos = None # the moving point of the cursor
         if event.button() == QtCore.Qt.LeftButton:
             self.__mousePressPos = event.globalPos()
             self.__mouseMovePos = event.globalPos()
@@ -34,14 +40,21 @@ class AnchorView(QtWidgets.QPushButton):
 
 
     def mouseMoveEvent(self, event):
+        """ Moves the anchor point as long as the left mouse button is pressed down. """
+        self.setCursor(QtCore.Qt.PointingHandCursor)
         if event.buttons() == QtCore.Qt.LeftButton:
+            # Get the current position of the anchor point
             curr_pos = self.mapToGlobal(self.pos())
+    
+            # Get the position of the moving mouse 
             global_pos = event.globalPos()
-            diff = global_pos - self.__mouseMovePos
+            # Calculate the difference of the mouse position and the previous mouse position
+            diff = global_pos - self.__mouseMovePos 
+            # Move the anchor point to the new position
             new_pos = self.mapFromGlobal(curr_pos + diff)
 
+            # Constrain the anchor point inside the window frame 
             frame_geom = self.parent().geometry()
-
             if frame_geom.contains(new_pos + QtCore.QPoint(12, 12)) and frame_geom.contains(new_pos):
                 self.move(new_pos)
                 self.anchor_model.update(pos=new_pos)
@@ -50,6 +63,7 @@ class AnchorView(QtWidgets.QPushButton):
         super(AnchorView, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
+        # If the mouse moved while pressed down, don't trigger the clicked event.
         if self.__mousePressPos is not None:
             moved = event.globalPos() - self.__mousePressPos
             if moved.manhattanLength() > 3:
@@ -65,9 +79,8 @@ class AnchorView(QtWidgets.QPushButton):
             self.anchor_form.reset()
         
 
-
-""" Displays an input form for the latitude and longitude of the clicked point """
 class AnchorFormView(QtWidgets.QFrame):
+    """ Displays an input form for the latitude and longitude of the clicked point """
 
     def __init__(self, anchor_model, *args, **kwargs):
         QtWidgets.QFrame.__init__(self, *args, **kwargs)
@@ -138,8 +151,35 @@ class AnchorFormView(QtWidgets.QFrame):
     def mousePressEvent(self, event):
         pass
 
+    def get_form_values(self):
+        """ Validates the form input and returns appropriate values for the anchor coordinates and position. """
+        
+        state_lat, lat_value, _ = self.lat_validator.validate(self.lat_input.text(), 0)
+        if state_lat != QtGui.QValidator.Acceptable:
+            lat_value = self.anchor_model.lat
+
+        state_long, long_value, _ = self.long_validator.validate(self.long_input.text(), 0)
+        if state_long != QtGui.QValidator.Acceptable:
+            long_value = self.anchor_model.long
+
+        coords = QtCore.QPointF(float(lat_value), float(long_value))
+        
+        state_x, x_value, _ = self.x_validator.validate(self.x_input.text(), 0)
+        if state_x != QtGui.QValidator.Acceptable:
+            x_value = self.anchor_model.x
+        
+        state_y, y_value, _ = self.y_validator.validate(self.y_input.text(), 0)
+        if state_y != QtGui.QValidator.Acceptable:
+            y_value = self.anchor_model.y
+
+        pos = QtCore.QPoint(int(x_value), int(y_value))
+
+        return coords, pos
+
+
     def move_to_point(self):
-        """ Moves the anchor form to the xy point of the anchor """
+        """ Moves the anchor form to the xy point of the anchor 
+            ensuring it remains inside the window frame """
 
         x_offset = self.anchor_model.x - self.width() / 2 
         y_offset = self.anchor_model.y + 15
@@ -155,32 +195,8 @@ class AnchorFormView(QtWidgets.QFrame):
         self.move(x_offset, y_offset)
 
 
-    def get_form_values(self):
-        state_lat, lat_value, _ = self.lat_validator.validate(self.lat_input.text(), 0)
-        state_long, long_value, _ = self.long_validator.validate(self.long_input.text(), 0)
-
-        if state_lat != QtGui.QValidator.Acceptable:
-            lat_value = self.anchor_model.lat
-        if state_long != QtGui.QValidator.Acceptable:
-            long_value = self.anchor_model.long
-
-        coords = QtCore.QPointF(float(lat_value), float(long_value))
-        
-        state_x, x_value, _ = self.x_validator.validate(self.x_input.text(), 0)
-        state_y, y_value, _ = self.y_validator.validate(self.y_input.text(), 0)
-
-        if state_x != QtGui.QValidator.Acceptable:
-            x_value = self.anchor_model.x
-        if state_y != QtGui.QValidator.Acceptable:
-            y_value = self.anchor_model.y
-
-        pos = QtCore.QPoint(int(x_value), int(y_value))
-
-        return coords, pos
-
-
     def reset(self):
-        """ Reset the input text and the flags and hide the input form """
+        """ Reset the form's displayed text to the anchor model's values """
         
         self.x_input.setText(str(self.anchor_model.x))
         self.y_input.setText(str(self.anchor_model.y))

@@ -11,7 +11,7 @@ def run_application():
     model = Model()
     main_ctrl = MainController(model)
     main_window = MainWindow(model, main_ctrl)
-
+    
     main_window.show()
     sys.exit(app.exec_())
 

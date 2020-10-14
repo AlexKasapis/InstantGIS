@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from Components.AnchorView import AnchorView
+from Components.MapView import MapView
 
 class GISFrame(QtWidgets.QWidget):
 
@@ -20,22 +21,21 @@ class GISFrame(QtWidgets.QWidget):
         color.setAlpha(50)
         p.setColor(self.backgroundRole(), color)
         self.setPalette(p)
-
-        self.anchor_view1 = AnchorView(self.main_ctrl, self.model.anchor1, parent=self)
-        self.anchor_view2 = AnchorView(self.main_ctrl, self.model.anchor2, parent=self)
+        
+        self.dpi = QtGui.QGuiApplication.primaryScreen().physicalDotsPerInch()
+        self.map_view = MapView(parent=self, model=model, width=self.width(), height=self.height(), dpi=self.dpi)
 
         self.model.subscribe_update_func(self.reset_frame)
 
         self.reset_frame()
-        self.resetMap(True)
 
     def mousePressEvent(self, event):
         self.main_ctrl.close_anchor_form()
-        
+
+    def resizeEvent(self, event):
+        self.map_view.fit_to_frame(event.size().width(), event.size().height())
 
     def resetMap(self, reset_path):
-        self.anchor1 = ((0, 0), (-180, 90))
-        self.anchor2 = ((0, self.height()), (-180, -90))
         if reset_path:
             self.current_path = []
 
@@ -43,9 +43,9 @@ class GISFrame(QtWidgets.QWidget):
         pass
 
     def reset_frame(self):
-        self.anchor_view1.reset()
-        self.anchor_view2.reset()
-        
+        self.map_view.reset()
+        self.resetMap(True)
+
         self.redraw()
 
         

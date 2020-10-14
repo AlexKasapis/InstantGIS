@@ -3,6 +3,9 @@ from Header import Header
 from GISFrame import GISFrame
 from Controllers.MainController import MainController
 from Components.BorderFrame import BorderFrame, BorderOrientation
+from Components.MapView import MapView
+
+
 
 class MainWindow(QtWidgets.QMainWindow):
 
