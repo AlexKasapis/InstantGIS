@@ -27,3 +27,7 @@ class CloseButton(QtWidgets.QPushButton):
         self.setStyleSheet('''
         background-color: #323232;
         border: 0px''')
+
+    def mousePressEvent(self, event):
+        super(CloseButton, self).mousePressEvent(event)
+        event.accept()

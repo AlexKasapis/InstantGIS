@@ -28,3 +28,7 @@ class MinimizeButton(QtWidgets.QPushButton):
         background-color: #323232;
         border: 0px''')
 
+    def mousePressEvent(self, event):
+        super(MinimizeButton, self).mousePressEvent(event)
+        event.accept()
+

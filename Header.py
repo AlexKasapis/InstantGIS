@@ -2,7 +2,6 @@ import win32gui
 from PyQt5 import QtCore, QtWidgets
 from Components.Buttons.HelpButton import HelpButton
 from Components.Buttons.MinimizeButton import MinimizeButton
-from Components.Buttons.MaximizeButton import MaximizeButton
 from Components.Buttons.CloseButton import CloseButton
 
 
@@ -32,14 +31,8 @@ class Header(QtWidgets.QFrame):
             font-weight: 500''')
         header_layout.addWidget(title_label, 1, QtCore.Qt.AlignLeft)
 
-        #help_button = HelpButton(self)
-        #header_layout.addWidget(help_button, 0, QtCore.Qt.AlignLeft)
-
         minimize_button = MinimizeButton(self)
         header_layout.addWidget(minimize_button, 0, QtCore.Qt.AlignLeft)
-
-        maximize_button = MaximizeButton(self)
-        header_layout.addWidget(maximize_button, 0, QtCore.Qt.AlignLeft)
 
         close_button = CloseButton(self)
         header_layout.addWidget(close_button, 0, QtCore.Qt.AlignLeft)
@@ -53,7 +46,7 @@ class Header(QtWidgets.QFrame):
         self.mouse_pos = win32gui.GetCursorInfo()[2]
 
     def mouseReleaseEvent(self, *args, **kwargs):
-        if not self.is_mouse_pressed:
+        if self.is_mouse_pressed:
             self.is_mouse_pressed = False
 
     def mouseMoveEvent(self, *args, **kwargs):
