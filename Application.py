@@ -1,18 +1,20 @@
 import sys
-from PyQt5 import QtWidgets
-from MainWindow import MainWindow
-from Controllers.MainController import MainController
-from Models.Model import Model
+from PyQt5 import QtWidgets, QtCore
+from MainController import MainController
+from Components.MainWindow import MainWindow
+
 
 def run_application():
+    # Create the app.
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle("QtCurve")
     
-    model = Model()
-    main_ctrl = MainController(model)
-    main_window = MainWindow(model, main_ctrl)
+    # Create the controller and the window.
+    controller = MainController()
+    window = MainWindow(controller)
     
-    main_window.show()
+    # Show the window and launch the application.
+    window.show()
     sys.exit(app.exec_())
 
 

@@ -8,7 +8,7 @@ class HelpButton(QtWidgets.QPushButton):
 
         self.setFixedSize(QtCore.QSize(40, 30))
         self.setText("")
-        self.setIcon(QtGui.QIcon("icons/icons8-question-mark-48.png"))
+        self.setIcon(QtGui.QIcon("./Resources/Icons/icons8-question-mark-48.png"))
         self.setIconSize(QtCore.QSize(25, 25))
         self.clicked.connect(self.button_clicked)
     

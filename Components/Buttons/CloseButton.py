@@ -8,7 +8,7 @@ class CloseButton(QtWidgets.QPushButton):
 
         self.setFixedSize(QtCore.QSize(40, 30))
         self.setText("")
-        self.setIcon(QtGui.QIcon("icons/icon_close.png"))
+        self.setIcon(QtGui.QIcon("./Resources/Icons/icon_close.png"))
         self.setIconSize(QtCore.QSize(25, 25))
         self.setStyleSheet('''
             background-color: #323232;

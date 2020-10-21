@@ -41,15 +41,16 @@ class Header(QtWidgets.QFrame):
     def close_button_click():
         QtCore.QCoreApplication.instance().quit()
 
-    def mousePressEvent(self, *args, **kwargs):
-        self.is_mouse_pressed = True
-        self.mouse_pos = win32gui.GetCursorInfo()[2]
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.is_mouse_pressed = True
+            self.mouse_pos = win32gui.GetCursorInfo()[2]
 
-    def mouseReleaseEvent(self, *args, **kwargs):
-        if self.is_mouse_pressed:
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton and self.is_mouse_pressed:
             self.is_mouse_pressed = False
 
-    def mouseMoveEvent(self, *args, **kwargs):
+    def mouseMoveEvent(self, event):
         if self.is_mouse_pressed:
             # Get the current mouse position.
             curr_mouse_position = win32gui.GetCursorInfo()[2]
