@@ -62,6 +62,8 @@ class MapCanvas(FigureCanvasQTAgg):
         # self.world = world.to_crs(epsg=3857)  # Web Mercator
         self.world.plot(ax=self.axes, color='black', linewidth=1)
 
+        self.controller.reset_plot()
+
     def drop_resolution(self, keep_amount, keep_total):
         for i in range(len(self.world['geometry'])):
             line_coords = self.world['geometry'][i].coords
@@ -70,14 +72,6 @@ class MapCanvas(FigureCanvasQTAgg):
                 if not j % keep_total > keep_amount:
                     new_coords.append(line_coords[j])
             self.world['geometry'][i].coords = [line_coords[0]] + new_coords + [line_coords[-1]]
-
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Control:
-            self.drag_separately = True
-
-    def keyReleaseEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Control:
-            self.drag_separately = False
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -89,23 +83,40 @@ class MapCanvas(FigureCanvasQTAgg):
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton and self.pressed_mouse_button == QtCore.Qt.LeftButton:
             self.pressed_mouse_button = None
+            if not self.controller.free_map_mode and not self.mouse_dragged:
+                print('Generate new path point!') 
+            self.mouse_dragged = False
         elif event.button() == QtCore.Qt.RightButton and self.pressed_mouse_button == QtCore.Qt.RightButton:
             self.pressed_mouse_button = None
+            self.mouse_dragged = False
 
     def mouseMoveEvent(self, event):
         if self.pressed_mouse_button != None:
-            dist = event.globalPos() - self.cursor_position
+            self.mouse_dragged = True
 
-            if (self.pressed_mouse_button == QtCore.Qt.LeftButton):
-                self.controller.plot_pan(dist)
-            elif self.pressed_mouse_button == QtCore.Qt.RightButton:
-                self.controller.plot_zoom((dist.x(), -dist.y()))
+            if self.controller.free_map_mode:
+                dist = event.globalPos() - self.cursor_position
 
-            self.cursor_position = event.globalPos()
+                if (self.pressed_mouse_button == QtCore.Qt.LeftButton):
+                    self.controller.plot_pan(dist)
+                elif self.pressed_mouse_button == QtCore.Qt.RightButton:
+                    self.controller.plot_zoom((dist.x(), -dist.y()))
+
+                self.cursor_position = event.globalPos()
+            
+        x = event.pos().x()
+        y = event.pos().y()
+        (lon, lat) = CanvasUtilities.convert_window_to_world(self, x, y)
+        self.controller.set_footer_description('Cursor at ({}x, {}y) -> ({}°, {}°). {}'.format(x, y, lon, lat, 
+            '' if self.controller.free_map_mode else 'Click to place path point.'))
+
+    def leaveEvent(self, event):
+        self.controller.set_footer_description('')
 
     def wheelEvent(self, event):
-        zoom_value = event.angleDelta() * 0.2
-        self.controller.plot_zoom((zoom_value.y(), zoom_value.y()))
+        if (self.controller.free_map_mode):
+            zoom_value = event.angleDelta() * 0.2
+            self.controller.plot_zoom((zoom_value.y(), zoom_value.y()))
 
     def resizeEvent(self, event):
         # The aspect ratio seeks to make the plot fit the window

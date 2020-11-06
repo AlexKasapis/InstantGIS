@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from Components.MapCanvas import MapCanvas
+from Settings import CanvasUtilities
 
 
 class GISFrame(QtWidgets.QWidget):

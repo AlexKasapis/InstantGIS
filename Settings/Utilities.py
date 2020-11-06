@@ -4,7 +4,7 @@ import math
 from PyQt5 import QtCore
 
 
-window_starting_width = 800
+window_starting_width = 840
 window_starting_height = 600
 
 window_min_width = 600

@@ -1,8 +1,7 @@
 import win32gui
 from PyQt5 import QtCore, QtWidgets
-from Components.Buttons.HelpButton import HelpButton
-from Components.Buttons.MinimizeButton import MinimizeButton
-from Components.Buttons.CloseButton import CloseButton
+from Components.Buttons.Header.MinimizeButton import MinimizeButton
+from Components.Buttons.Header.CloseButton import CloseButton
 
 
 class Header(QtWidgets.QFrame):
@@ -17,7 +16,7 @@ class Header(QtWidgets.QFrame):
         self.mouse_pos = (0, 0)
 
         self.setFixedHeight(30)
-        self.setStyleSheet('background-color: #323232;')
+        self.setStyleSheet('''background-color: #323232;''')
 
         # Layout
         header_layout = QtWidgets.QHBoxLayout()

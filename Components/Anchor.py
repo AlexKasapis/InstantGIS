@@ -19,11 +19,11 @@ class Anchor(QtWidgets.QPushButton):
         self.is_anchor_dragged = False
         self.mouse_click_rel_pos = None
         
-        self.setGeometry(self.x, self.y, 10, 10) 
+        self.setGeometry(self.x, self.y, 12, 12) 
         self.setStyleSheet("""  
-            background-color: gold;
-            border-radius: 5; 
-            border: 1px solid black
+            background-color: #CCBF8F;
+            border-radius: 6; 
+            border: 2px solid #808080;
             """)
 
         self.setMouseTracking(True)
@@ -40,6 +40,14 @@ class Anchor(QtWidgets.QPushButton):
         self.lon = values['Longitude']
         self.lat = values['Latitude']
         self.controller.update_limits()
+
+    def enterEvent(self, event):
+        self.controller.set_footer_description('Anchor at ({}x, {}y) -> ({}°, {}°). Drag or click to set coordinates.'.format(self.x, self.y, self.lon, self.lat))
+        super(Anchor, self).enterEvent(event)
+
+    def leaveEvent(self, event):
+        self.controller.set_footer_description('')
+        super(Anchor, self).leaveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:

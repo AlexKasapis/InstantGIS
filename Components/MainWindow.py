@@ -3,6 +3,8 @@ from MainController import MainController
 from Components.Header import Header
 from Components.GISFrame import GISFrame
 from Components.BorderFrame import BorderFrame, BorderOrientation
+from Components.Toolbar import Toolbar
+from Components.Footer import Footer
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -39,7 +41,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Main body
         center_widget = QtWidgets.QWidget(main_widget)
-        center_layout = QtWidgets.QHBoxLayout()
+        center_layout = QtWidgets.QGridLayout()
+        # center_layout.setColumnStretch(1, 4)
+        # center_layout.setColumnStretch(2, 4)
         center_widget.setLayout(center_layout)
         center_layout.setSpacing(0)
         center_layout.setContentsMargins(0, 0, 0, 0)
@@ -47,15 +51,23 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Main body -> Left border.
         left_border = BorderFrame(BorderOrientation.Left, self.controller, parent=center_widget)
-        center_layout.addWidget(left_border, QtCore.Qt.AlignLeft)
+        center_layout.addWidget(left_border, 0, 0, 2, 1)
+
+        # Main body -> Toolbar
+        toolbar = Toolbar(self, controller)
+        center_layout.addWidget(toolbar, 0, 1)
 
         # Main body -> GIS frame
         gis_frame = GISFrame(self.controller, parent=center_widget)
-        center_layout.addWidget(gis_frame, QtCore.Qt.AlignLeft)
+        center_layout.addWidget(gis_frame, 0, 2)
+
+        # Main body -> Footer
+        footer = Footer(self.controller, parent=center_widget)
+        center_layout.addWidget(footer, 1, 1,1, 2)
 
         # Main body -> Right border.
         right_border = BorderFrame(BorderOrientation.Right, self.controller, parent=center_widget)
-        center_layout.addWidget(right_border, QtCore.Qt.AlignLeft)
+        center_layout.addWidget(right_border, 0, 3, 2, 1)
 
         # Bottom border.
         bottom_border = BorderFrame(BorderOrientation.Bottom, self.controller, parent=main_widget)

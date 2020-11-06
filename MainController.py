@@ -12,6 +12,8 @@ class MainController():
         self.anchors = []
         self.map_canvas = None
         self.current_path = []
+        self.free_map_mode = True
+        self.footer = None
 
     def get_window_min_width(self):
         return Utilities.window_min_width
@@ -122,3 +124,41 @@ class MainController():
 
     def update_limits(self):
         CanvasUtilities.update_plot_limits(self.map_canvas, self.anchors)
+
+    def reset_plot(self):
+        self.map_canvas.axes.set_xlim(-180, 180)
+        self.map_canvas.axes.set_ylim(-90, 90)
+
+        (x, y) = CanvasUtilities.convert_world_to_window(self.map_canvas, -160, 80)
+        self.anchors[0].setGeometry(x, y, self.anchors[0].width(), self.anchors[0].height())
+        self.anchors[0].x = x
+        self.anchors[0].y = y
+        self.anchors[0].lon = -160
+        self.anchors[0].lat = 80
+        
+        (x, y) = CanvasUtilities.convert_world_to_window(self.map_canvas, 160, -80)
+        self.anchors[1].setGeometry(x, y, self.anchors[1].width(), self.anchors[1].height())
+        self.anchors[1].x = x
+        self.anchors[1].y = y
+        self.anchors[1].lon = 160
+        self.anchors[1].lat = -80
+        
+        CanvasUtilities.redraw_plot(self.map_canvas)
+
+    def show_help_window(self):
+        print('Beep boop... showing help...')
+
+    def show_about_us_window(self):
+        print('Beep boop... it\'s us..!')
+
+    def show_export_menu(self):
+        print('Beep boop... export how..?')
+
+    def toggle_plot_mode(self):
+        print('Beep boop... changing plot state...')
+        self.free_map_mode = not self.free_map_mode
+        self.footer.update_mode_label()
+        self.set_footer_description('Change to {} mode'.format('path creation' if self.free_map_mode else 'free map'))
+
+    def set_footer_description(self, string):
+        self.footer.description_label.setText(string)
