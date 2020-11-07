@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QPainter, QColor
 import Settings.Utilities
 
 
@@ -51,11 +52,18 @@ def update_plot_limits(figure_canvas, anchors):
     
     # Apply the limits
     figure_canvas.axes.set_xlim([x_lim1, x_lim2])
-    figure_canvas.axes.set_ylim([y_lim2, y_lim1])
+    figure_canvas.axes.set_ylim([y_lim2, y_lim1])  
 
-    redraw_plot(figure_canvas)    
+def redraw_plot(figure_canvas, controller):
 
-def redraw_plot(figure_canvas):
+    # if len(controller.current_path) > 1:
+    #     controller.map_canvas.painter = QPainter(controller.map_canvas)
+    #     controller.map_canvas.painter.begin(controller.map_canvas)
+    #     controller.map_canvas.painter.setPen(QColor('#D66355'))
+    #     for i in range(len(controller.current_path) - 1):
+    #         controller.map_canvas.painter.drawLine(controller.current_path[i].x, controller.current_path[i].y, controller.current_path[i + 1].x, controller.current_path[i + 1].y)
+    #     controller.map_canvas.painter.end()
+
     figure_canvas.figure.canvas.draw()
     figure_canvas.figure.canvas.flush_events()
 

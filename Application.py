@@ -1,12 +1,12 @@
 import sys
-from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QApplication
 from MainController import MainController
 from Components.MainWindow import MainWindow
 
 
 def run_application():
     # Create the app.
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     app.setStyle("QtCurve")
     
     # Create the controller and the window.

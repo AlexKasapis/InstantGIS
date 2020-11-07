@@ -1,7 +1,8 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QDialog, QLineEdit, QPushButton, QFormLayout
 
 
-class AnchorMenu(QtWidgets.QDialog):
+class AnchorMenu(QDialog):
 
     accepted = QtCore.pyqtSignal(dict)
 
@@ -10,19 +11,19 @@ class AnchorMenu(QtWidgets.QDialog):
         
         self.setWindowTitle("Set coordinates")
 
-        self.longitude_input = QtWidgets.QLineEdit()
+        self.longitude_input = QLineEdit()
         self.longitude_input.setText(str(lon))
         self.longitude_input.textEdited[str].connect(self.unlock)
 
-        self.latitude_input = QtWidgets.QLineEdit()
+        self.latitude_input = QLineEdit()
         self.latitude_input.setText(str(lat))
         self.latitude_input.textEdited[str].connect(self.unlock)
 
-        self.ok_button = QtWidgets.QPushButton('OK')
+        self.ok_button = QPushButton('OK')
         self.ok_button.setEnabled(self.are_inputs_valid())
         self.ok_button.clicked.connect(self.ok_pressed)
 
-        form = QtWidgets.QFormLayout(self)
+        form = QFormLayout(self)
         form.addRow('Longitude', self.longitude_input)
         form.addRow('Latitude', self.latitude_input)
         form.addRow(self.ok_button)

@@ -1,16 +1,18 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QPushButton
 
 
-class PlotModeButton(QtWidgets.QPushButton):
+class PlotModeButton(QPushButton):
 
     def __init__(self, parent, controller, *args, **kwargs):
         super(PlotModeButton, self).__init__(*args, **kwargs)
 
         # Visuals
-        self.setFixedSize(QtCore.QSize(37, 37))
+        self.setFixedSize(QSize(37, 37))
         self.setText("")
-        self.setIcon(QtGui.QIcon("./Resources/Icons/icon_move.png"))
-        self.setIconSize(QtCore.QSize(30, 30))
+        self.setIcon(QIcon("./Resources/Icons/icon_move.png"))
+        self.setIconSize(QSize(30, 30))
         self.setStyleSheet('''
             background-color: #323232;
             border: 2px solid #808080;
@@ -21,9 +23,9 @@ class PlotModeButton(QtWidgets.QPushButton):
 
         # Attributes
         self.controller = controller
-        self.icon_move = QtGui.QIcon("./Resources/Icons/icon_move.png")
-        self.icon_pin = QtGui.QIcon("./Resources/Icons/icon_pin.png")
-
+        self.icon_move = QIcon("./Resources/Icons/icon_move.png")
+        self.icon_pin = QIcon("./Resources/Icons/icon_pin.png")
+        
         # Call functions
         self.set_icon()
         

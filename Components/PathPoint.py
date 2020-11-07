@@ -5,7 +5,7 @@ from Components.AnchorMenu import AnchorMenu
 from Settings import Utilities
 
 
-class Anchor(QPushButton):
+class PathPoint(QPushButton):
 
     def __init__(self, window_pos, world_coord, controller, *args, **kwargs):
         QPushButton.__init__(self, *args, **kwargs)
@@ -21,48 +21,36 @@ class Anchor(QPushButton):
         self.is_anchor_dragged = False
         self.mouse_click_rel_pos = None
         
-        self.setGeometry(self.x, self.y, 12, 12) 
+        self.setGeometry(self.x - 2, self.y - 2, 4, 4) 
         self.setStyleSheet("""  
-            background-color: #CCBF8F;
-            border-radius: 6; 
-            border: 2px solid #808080;
+            background-color: #D66355;
+            border-radius: 1; 
+            border: 0px;
             """)
 
         self.setMouseTracking(True)
         self.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.clicked.connect(self.anchor_clicked)
-
-    def anchor_clicked(self):
-        anchor_menu = AnchorMenu(self.lon, self.lat)
-        anchor_menu.accepted.connect(self.update_coordinates)
-        anchor_menu.exec_()
-
-    def update_coordinates(self, values):
-        self.lon = values['Longitude']
-        self.lat = values['Latitude']
-        self.controller.update_limits()
-
     def enterEvent(self, event):
-        self.controller.set_footer_description('Anchor at ({}x, {}y) -> ({}°, {}°). Drag or click to set coordinates.'.format(self.x, self.y, self.lon, self.lat))
-        super(Anchor, self).enterEvent(event)
+        self.controller.set_footer_description('Path point at ({}x, {}y) -> ({}°, {}°). Left click to drag, right click to remove.'.format(self.x, self.y, self.lon, self.lat))
+        super(PathPoint, self).enterEvent(event)
 
     def leaveEvent(self, event):
         self.controller.set_footer_description('')
-        super(Anchor, self).leaveEvent(event)
+        super(PathPoint, self).leaveEvent(event)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.is_mouse_pressed = True
             self.mouse_click_rel_pos = event.pos()
-        super(Anchor, self).mousePressEvent(event)
+        super(PathPoint, self).mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton and self.is_mouse_pressed:
             self.is_mouse_pressed = False
 
-        if not self.is_anchor_dragged:
-            super(Anchor, self).mouseReleaseEvent(event)
+        if not self.is_anchor_dragged and event.button() == Qt.RightButton:
+            self.controller.remove_path_point(self)
         else:
             self.is_anchor_dragged = False
 
@@ -81,11 +69,9 @@ class Anchor(QPushButton):
             self.x = new_x
             self.y = new_y
 
-            self.controller.fix_anchor_world_coordinates()
-            
-            # Update plot limits
-            self.controller.update_limits()
-        super(Anchor, self).mouseMoveEvent(event)
+            self.controller.fix_path_world_coordinates()
+            self.controller.redraw_path()
+        super(PathPoint, self).mouseMoveEvent(event)
 
     def get_window_coordinates(self):
         return (self.x, self.y)

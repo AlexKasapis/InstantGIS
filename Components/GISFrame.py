@@ -1,5 +1,6 @@
 import sys
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtGui import QColor, QGuiApplication
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
@@ -7,27 +8,26 @@ from Components.MapCanvas import MapCanvas
 from Settings import CanvasUtilities
 
 
-class GISFrame(QtWidgets.QWidget):
+class GISFrame(QWidget):
 
     def __init__(self, controller, *args, **kwargs):
-        QtWidgets.QWidget.__init__(self, *args, **kwargs)
+        QWidget.__init__(self, *args, **kwargs)
         
         self.controller = controller
 
         self.setAutoFillBackground(True)
-        color = QtGui.QColor("gray")
+        color = QColor("gray")
         color.setAlpha(50)
         palette = self.palette()
         palette.setColor(self.backgroundRole(), color)
         self.setPalette(palette)
         
-        self.dpi = QtGui.QGuiApplication.primaryScreen().physicalDotsPerInch()
+        self.dpi = QGuiApplication.primaryScreen().physicalDotsPerInch()
         self.map_canvas = MapCanvas(controller=self.controller, parent=self, dpi=self.dpi)
         self.toolbar = NavigationToolbar2QT(parent=self, canvas=self.map_canvas)
         self.toolbar.hide()
-        #self.toolbar.pan()
 
-        layout = QtWidgets.QVBoxLayout()
+        layout = QVBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.toolbar)

@@ -1,6 +1,8 @@
+from matplotlib import lines
 from Settings import Utilities
 from Settings import ResizeUtilities
 from Settings import CanvasUtilities
+from Components.PathPoint import PathPoint
 
 
 class MainController():
@@ -42,6 +44,12 @@ class MainController():
             temp = self.anchors[y_b].lat
             self.anchors[y_b].lat = self.anchors[y_t].lat
             self.anchors[y_t].lat = temp
+            
+    def fix_path_world_coordinates(self):
+        for i in range(len(self.current_path)):
+            (lon, lat) = CanvasUtilities.convert_window_to_world(self.map_canvas, self.current_path[i].x, self.current_path[i].y)
+            self.current_path[i].lon = lon
+            self.current_path[i].lat = lat
 
     # Returns the other anchor between the two anchors.
     def get_other_anchor(self, anchor):
@@ -64,7 +72,9 @@ class MainController():
         # Update anchor coordinates.
         self.anchors_snap_to_window()
 
-        CanvasUtilities.redraw_plot(self.map_canvas)
+        if len(self.current_path) > 0:
+            self.fix_path_world_coordinates()
+        CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     # Event handline zooming the plot. Zooming changes the anchors' lon/lat values, because they remain in the same x/y window positions.
     def plot_zoom(self, dist):
@@ -85,7 +95,9 @@ class MainController():
         self.anchors_snap_to_window()
 
         # Redraw the plot.
-        CanvasUtilities.redraw_plot(self.map_canvas)
+        if len(self.current_path) > 0:
+            self.fix_path_world_coordinates()
+        CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     # Change the anchors' world coordinates depending on where they are positioned in the window.
     def anchors_snap_to_window(self):
@@ -121,9 +133,11 @@ class MainController():
         self.anchors[y_b_idx].setGeometry(self.anchors[y_b_idx].x, self.anchors[y_b_idx].y, self.anchors[y_b_idx].width(), self.anchors[y_b_idx].height())
         
         CanvasUtilities.update_plot_limits(self.map_canvas, self.anchors)
+        CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     def update_limits(self):
         CanvasUtilities.update_plot_limits(self.map_canvas, self.anchors)
+        CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     def reset_plot(self):
         self.map_canvas.axes.set_xlim(-180, 180)
@@ -142,8 +156,8 @@ class MainController():
         self.anchors[1].y = y
         self.anchors[1].lon = 160
         self.anchors[1].lat = -80
-        
-        CanvasUtilities.redraw_plot(self.map_canvas)
+
+        CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     def show_help_window(self):
         print('Beep boop... showing help...')
@@ -152,13 +166,32 @@ class MainController():
         print('Beep boop... it\'s us..!')
 
     def show_export_menu(self):
-        print('Beep boop... export how..?')
+        print([(i+1, self.current_path[i].lon, self.current_path[i].lat) for i in range(len(self.current_path))])
 
     def toggle_plot_mode(self):
-        print('Beep boop... changing plot state...')
         self.free_map_mode = not self.free_map_mode
         self.footer.update_mode_label()
         self.set_footer_description('Change to {} mode'.format('path creation' if self.free_map_mode else 'free map'))
 
     def set_footer_description(self, string):
         self.footer.description_label.setText(string)
+
+    def add_path_point(self, x, y):
+        self.current_path.append(PathPoint((x, y), CanvasUtilities.convert_window_to_world(self.map_canvas, x, y), self, parent=self.map_canvas))
+        self.current_path[-1].show()
+        self.redraw_path()
+
+    def remove_path_point(self, path_point):
+        self.current_path.remove(path_point)
+        path_point.deleteLater()
+        path_point = None
+        self.redraw_path()
+
+    def redraw_path(self):
+        lines_list = []
+        for i in range(len(self.current_path) - 1):
+            p1 = self.current_path[i]
+            p2 = self.current_path[i + 1]
+            lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color='#D66355'))
+        self.map_canvas.figure.lines = lines_list
+        CanvasUtilities.redraw_plot(self.map_canvas, self)

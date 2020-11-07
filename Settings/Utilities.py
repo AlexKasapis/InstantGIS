@@ -1,7 +1,7 @@
 import win32api
 import win32gui
 import math
-from PyQt5 import QtCore
+from PyQt5.QtCore import QPoint
 
 
 window_starting_width = 840
@@ -46,4 +46,4 @@ def get_euclidean_distance(p1, p2):
 
 def get_mouse_position():
     _, _, (x,y) = win32gui.GetCursorInfo()
-    return QtCore.QPoint(x, y)
+    return QPoint(x, y)

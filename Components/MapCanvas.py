@@ -1,9 +1,9 @@
-from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor, QPainter
 from matplotlib.figure import Figure
-import geopandas as gp
-from matplotlib import pyplot
+from matplotlib import lines
+import geopandas
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 from Components.Anchor import Anchor
 from Components.AnchorMenu import AnchorMenu
 from Settings import CanvasUtilities
@@ -23,10 +23,13 @@ class MapCanvas(FigureCanvasQTAgg):
         self.figure.patch.set_alpha(0)
         super(MapCanvas, self).__init__(self.figure)
 
+        self.path = []
+
         self.anchor_diameter = 10
 
         self.pressed_mouse_button = None  # None, QtCore.Qt.LeftButton, QtCore.Qt.RightButton
         self.drag_separately = False  # If true, zooming is axis independent
+        self.mouse_dragged = False
 
         # Setup plot axes.
         self.figure.tight_layout()
@@ -47,9 +50,6 @@ class MapCanvas(FigureCanvasQTAgg):
         self.axes.spines["right"].set_visible(False)
         self.axes.spines["bottom"].set_visible(False)
 
-        #self.axes.callbacks.connect('ylim_changed', self.callback)
-        #self.cid1 = self.figure.canvas.mpl_connect('scroll_event', self.resize_canvas)
-
         # Setup anchors.
         self.controller.anchors = [
             Anchor(CanvasUtilities.convert_world_to_window(self, -160, 70), (-160, 70), self.controller, parent=self), 
@@ -57,7 +57,7 @@ class MapCanvas(FigureCanvasQTAgg):
             ]
 
         # Load data file.
-        self.world = gp.read_file('./Resources/MapData/coastline.geojson')
+        self.world = geopandas.read_file('./Resources/MapData/coastline.geojson')
         self.drop_resolution(2, 5)
         # self.world = world.to_crs(epsg=3857)  # Web Mercator
         self.world.plot(ax=self.axes, color='black', linewidth=1)
@@ -74,19 +74,19 @@ class MapCanvas(FigureCanvasQTAgg):
             self.world['geometry'][i].coords = [line_coords[0]] + new_coords + [line_coords[-1]]
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self.pressed_mouse_button = QtCore.Qt.LeftButton
-        elif event.button() == QtCore.Qt.RightButton:
-            self.pressed_mouse_button = QtCore.Qt.RightButton
+        if event.button() == Qt.LeftButton:
+            self.pressed_mouse_button = Qt.LeftButton
+        elif event.button() == Qt.RightButton:
+            self.pressed_mouse_button = Qt.RightButton
         self.cursor_position = event.globalPos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton and self.pressed_mouse_button == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton and self.pressed_mouse_button == Qt.LeftButton:
             self.pressed_mouse_button = None
             if not self.controller.free_map_mode and not self.mouse_dragged:
-                print('Generate new path point!') 
+                self.controller.add_path_point(event.pos().x(), event.pos().y())
             self.mouse_dragged = False
-        elif event.button() == QtCore.Qt.RightButton and self.pressed_mouse_button == QtCore.Qt.RightButton:
+        elif event.button() == Qt.RightButton and self.pressed_mouse_button == Qt.RightButton:
             self.pressed_mouse_button = None
             self.mouse_dragged = False
 
@@ -97,9 +97,9 @@ class MapCanvas(FigureCanvasQTAgg):
             if self.controller.free_map_mode:
                 dist = event.globalPos() - self.cursor_position
 
-                if (self.pressed_mouse_button == QtCore.Qt.LeftButton):
+                if (self.pressed_mouse_button == Qt.LeftButton):
                     self.controller.plot_pan(dist)
-                elif self.pressed_mouse_button == QtCore.Qt.RightButton:
+                elif self.pressed_mouse_button == Qt.RightButton:
                     self.controller.plot_zoom((dist.x(), -dist.y()))
 
                 self.cursor_position = event.globalPos()
@@ -109,6 +109,14 @@ class MapCanvas(FigureCanvasQTAgg):
         (lon, lat) = CanvasUtilities.convert_window_to_world(self, x, y)
         self.controller.set_footer_description('Cursor at ({}x, {}y) -> ({}°, {}°). {}'.format(x, y, lon, lat, 
             '' if self.controller.free_map_mode else 'Click to place path point.'))
+
+    def is_path_same(self):
+        if len(self.path) != len(self.controller.current_path):
+            return False
+        for i in range(len(self.path)):
+            if self.path[i][0] != self.controller.current_path[i].x or self.path[i][1] != self.controller.current_path[i].y:
+                return False
+        return True
 
     def leaveEvent(self, event):
         self.controller.set_footer_description('')

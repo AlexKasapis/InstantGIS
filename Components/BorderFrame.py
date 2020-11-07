@@ -1,6 +1,8 @@
 import win32gui
 import enum
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QLabel, QWidget
 from Settings import ResizeUtilities
 
 # Denoting the four different placements of a border.
@@ -10,10 +12,10 @@ class BorderOrientation(enum.Enum):
     Right = 3
     Bottom = 4
 
-class BorderFrame(QtWidgets.QLabel):
+class BorderFrame(QLabel):
 
     def __init__(self, orientation, controller, *args, **kwargs):
-        QtWidgets.QLabel.__init__(self, *args, **kwargs)
+        QLabel.__init__(self, *args, **kwargs)
     
         self.border_orientation = orientation
         self.controller = controller
@@ -52,11 +54,11 @@ class BorderFrame(QtWidgets.QLabel):
         self.set_cursor(True)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             self.is_mouse_pressed = True
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton and self.is_mouse_pressed:
+        if event.button() == Qt.LeftButton and self.is_mouse_pressed:
             self.is_mouse_pressed = False  
 
     def mouseMoveEvent(self, event):
@@ -83,26 +85,26 @@ class BorderFrame(QtWidgets.QLabel):
             return
 
     def set_cursor(self, reset):
-        cursor = QtGui.QCursor()
+        cursor = QCursor()
 
         if reset:
-            cursor.setShape(QtCore.Qt.SizeAllCursor)
+            cursor.setShape(Qt.SizeAllCursor)
         else:
             if self.resize_orientation == ResizeUtilities.ResizeOrientation.Left:
-                cursor.setShape(QtCore.Qt.SizeHorCursor)
+                cursor.setShape(Qt.SizeHorCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.TopLeft:
-                cursor.setShape(QtCore.Qt.SizeFDiagCursor)
+                cursor.setShape(Qt.SizeFDiagCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.Top:
-                cursor.setShape(QtCore.Qt.SizeVerCursor)
+                cursor.setShape(Qt.SizeVerCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.TopRight:
-                cursor.setShape(QtCore.Qt.SizeBDiagCursor)
+                cursor.setShape(Qt.SizeBDiagCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.Right:
-                cursor.setShape(QtCore.Qt.SizeHorCursor)
+                cursor.setShape(Qt.SizeHorCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.BottomRight:
-                cursor.setShape(QtCore.Qt.SizeFDiagCursor)
+                cursor.setShape(Qt.SizeFDiagCursor)
             elif self.resize_orientation == ResizeUtilities.ResizeOrientation.Bottom:
-                cursor.setShape(QtCore.Qt.SizeVerCursor)
+                cursor.setShape(Qt.SizeVerCursor)
             else:
-                cursor.setShape(QtCore.Qt.SizeBDiagCursor)
+                cursor.setShape(Qt.SizeBDiagCursor)
         
-        QtWidgets.QWidget.setCursor (self, cursor)
+        QWidget.setCursor (self, cursor)

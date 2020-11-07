@@ -1,14 +1,13 @@
-import win32gui
-import enum
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel
 from Settings import ResizeUtilities
 
 
-class Footer(QtWidgets.QFrame):
+class Footer(QFrame):
 
     def __init__(self, controller, *args, **kwargs):
         
-        QtWidgets.QFrame.__init__(self, *args, **kwargs)
+        QFrame.__init__(self, *args, **kwargs)
 
         self.controller = controller
         self.controller.footer = self
@@ -17,23 +16,23 @@ class Footer(QtWidgets.QFrame):
         self.setStyleSheet('''background-color: #323232;''')
 
         # Layout
-        layout = QtWidgets.QHBoxLayout()
+        layout = QHBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(3, 0, 2, 0)
         self.setLayout(layout)
 
-        self.description_label = QtWidgets.QLabel('')
+        self.description_label = QLabel('')
         self.description_label.setStyleSheet('''
             color: #808080;
             font-weight: 500;''')
         
-        self.mode_label = QtWidgets.QLabel('')
+        self.mode_label = QLabel('')
         self.mode_label.setStyleSheet('''
             color: #808080;
             font-weight: 500;''')
 
-        layout.addWidget(self.description_label, 1, QtCore.Qt.AlignLeft)
-        layout.addWidget(self.mode_label, 0, QtCore.Qt.AlignRight)
+        layout.addWidget(self.description_label, 1, Qt.AlignLeft)
+        layout.addWidget(self.mode_label, 0, Qt.AlignRight)
 
         self.update_mode_label()
 

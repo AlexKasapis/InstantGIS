@@ -1,15 +1,17 @@
 import win32gui, win32con
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QPushButton
 
 
-class MinimizeButton(QtWidgets.QPushButton):
+class MinimizeButton(QPushButton):
     def __init__(self, *args, **kwargs):
         super(MinimizeButton, self).__init__(*args, **kwargs)
 
-        self.setFixedSize(QtCore.QSize(40, 30))
+        self.setFixedSize(QSize(40, 30))
         self.setText("")
-        self.setIcon(QtGui.QIcon("./Resources/Icons/icon_minimize.png"))
-        self.setIconSize(QtCore.QSize(25, 25))
+        self.setIcon(QIcon("./Resources/Icons/icon_minimize.png"))
+        self.setIconSize(QSize(25, 25))
         self.setStyleSheet('''
             background-color: #323232;
             border: 0px''')

@@ -1,16 +1,17 @@
-import win32gui
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QPushButton
 
 
-class ExportButton(QtWidgets.QPushButton):
+class ExportButton(QPushButton):
     def __init__(self, parent, controller, *args, **kwargs):
         super(ExportButton, self).__init__(*args, **kwargs)
 
         # Visuals
-        self.setFixedSize(QtCore.QSize(37, 37))
+        self.setFixedSize(QSize(37, 37))
         self.setText("")
-        self.setIcon(QtGui.QIcon("./Resources/Icons/icon_export.png"))
-        self.setIconSize(QtCore.QSize(30, 30))
+        self.setIcon(QIcon("./Resources/Icons/icon_export.png"))
+        self.setIconSize(QSize(30, 30))
         self.setStyleSheet('''
             background-color: #323232;
             border: 0px;''')
