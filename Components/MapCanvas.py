@@ -23,6 +23,8 @@ class MapCanvas(FigureCanvasQTAgg):
         self.figure.patch.set_alpha(0)
         super(MapCanvas, self).__init__(self.figure)
 
+        self.setStyleSheet('''background-color: transparent;''')
+
         self.path = []
 
         self.anchor_diameter = 10
