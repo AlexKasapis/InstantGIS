@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QFrame, QVBoxLayout
-from Components.Buttons.Toolbar.PlotResetButton import PlotResetButton
+from Components.Buttons.Toolbar.PlotResetButton import ResetButton
 from Components.Buttons.Toolbar.PlotModeButton import PlotModeButton
 from Components.Buttons.Toolbar.ExportButton import ExportButton
 from Components.Buttons.Toolbar.HelpButton import HelpButton
@@ -26,7 +26,7 @@ class Toolbar(QFrame):
         self.setLayout(layout)
         layout.addWidget(PlotModeButton(self, controller))
         layout.addWidget(ExportButton(self, controller))
-        layout.addWidget(PlotResetButton(self, controller))
+        layout.addWidget(ResetButton(self, controller))
         layout.addStretch(1)
         layout.addWidget(HelpButton(self, controller))
         layout.addWidget(AboutUsButton(self, controller))

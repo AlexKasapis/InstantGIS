@@ -195,3 +195,10 @@ class MainController():
             lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color='#D66355'))
         self.map_canvas.figure.lines = lines_list
         CanvasUtilities.redraw_plot(self.map_canvas, self)
+
+    def reset_path(self):
+        for i in range(len(self.current_path)):
+            self.current_path[i].deleteLater()
+            self.current_path[i] = None
+        self.current_path = []
+        self.redraw_path()

@@ -4,10 +4,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QPushButton
 
 
-class PlotResetButton(QPushButton):
+class ResetButton(QPushButton):
 
     def __init__(self, parent, controller, *args, **kwargs):
-        super(PlotResetButton, self).__init__(*args, **kwargs)
+        super(ResetButton, self).__init__(*args, **kwargs)
 
         # Visuals
         self.setFixedSize(QSize(37, 37))
@@ -25,10 +25,13 @@ class PlotResetButton(QPushButton):
         self.controller = controller
     
     def button_clicked(self):
-        self.controller.reset_plot()
+        if self.controller.free_map_mode:
+            self.controller.reset_plot()
+        else:
+            self.controller.reset_path()
 
     def enterEvent(self, event):
-        self.controller.set_footer_description('Reset plot view')
+        self.controller.set_footer_description('Reset {}'.format('plot view' if self.controller.free_map_mode else 'path'))
         self.setStyleSheet('''
         background-color: #555555;
         border: 0px''')
@@ -40,5 +43,5 @@ class PlotResetButton(QPushButton):
         border: 0px''')
 
     def mousePressEvent(self, event):
-        super(PlotResetButton, self).mousePressEvent(event)
+        super(ResetButton, self).mousePressEvent(event)
         event.accept()

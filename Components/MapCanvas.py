@@ -58,7 +58,7 @@ class MapCanvas(FigureCanvasQTAgg):
 
         # Load data file.
         self.world = geopandas.read_file('./Resources/MapData/coastline.geojson')
-        self.drop_resolution(2, 5)
+        #self.drop_resolution(2, 5)
         # self.world = world.to_crs(epsg=3857)  # Web Mercator
         self.world.plot(ax=self.axes, color='black', linewidth=1)
 
