@@ -4,6 +4,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QPushButton
 from Components.AnchorMenu import AnchorMenu
 from Settings import Utilities
+from Settings import CanvasUtilities
 
 
 class Anchor(QPushButton):
@@ -84,11 +85,14 @@ class Anchor(QPushButton):
                 self.setGeometry(new_x, new_y, self.width(), self.height())
                 self.x = new_x
                 self.y = new_y
+                (lon, lat) = CanvasUtilities.convert_window_to_world(self.controller.map_canvas, self.x, self.y)
+                self.lon = lon
+                self.lat = lat
 
-                self.controller.fix_anchor_world_coordinates()
+                #self.controller.fix_anchor_world_coordinates()
                 
                 # Update plot limits
-                self.controller.update_limits()
+                #self.controller.update_limits()
         super(Anchor, self).mouseMoveEvent(event)
 
     def get_window_coordinates(self):
