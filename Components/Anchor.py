@@ -1,3 +1,4 @@
+import win32gui
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QPushButton
@@ -34,7 +35,8 @@ class Anchor(QPushButton):
         self.clicked.connect(self.anchor_clicked)
 
     def anchor_clicked(self):
-        anchor_menu = AnchorMenu(self.lon, self.lat)
+        _, _, (x, y) = win32gui.GetCursorInfo()
+        anchor_menu = AnchorMenu(self.lon, self.lat, x, y)
         anchor_menu.accepted.connect(self.update_coordinates)
         anchor_menu.exec_()
 
