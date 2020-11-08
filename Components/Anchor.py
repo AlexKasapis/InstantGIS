@@ -35,10 +35,11 @@ class Anchor(QPushButton):
         self.clicked.connect(self.anchor_clicked)
 
     def anchor_clicked(self):
-        _, _, (x, y) = win32gui.GetCursorInfo()
-        anchor_menu = AnchorMenu(self.lon, self.lat, x, y)
-        anchor_menu.accepted.connect(self.update_coordinates)
-        anchor_menu.exec_()
+        if self.controller.free_map_mode:
+            _, _, (x, y) = win32gui.GetCursorInfo()
+            anchor_menu = AnchorMenu(self.lon, self.lat, x, y)
+            anchor_menu.accepted.connect(self.update_coordinates)
+            anchor_menu.exec_()
 
     def update_coordinates(self, values):
         self.lon = values['Longitude']
@@ -72,21 +73,22 @@ class Anchor(QPushButton):
         if self.is_mouse_pressed:
             self.is_anchor_dragged = True
 
-            new_x = Utilities.clamp(self.mapToParent(event.pos()).x() - self.mouse_click_rel_pos.x(), 0, self.parent().width())
-            new_y = Utilities.clamp(self.mapToParent(event.pos()).y() - self.mouse_click_rel_pos.y(), 0, self.parent().height())
+            if self.controller.free_map_mode:
+                new_x = Utilities.clamp(self.mapToParent(event.pos()).x() - self.mouse_click_rel_pos.x(), 0, self.parent().width())
+                new_y = Utilities.clamp(self.mapToParent(event.pos()).y() - self.mouse_click_rel_pos.y(), 0, self.parent().height())
 
-            if Utilities.get_euclidean_distance((new_x, new_y), self.controller.get_other_anchor(self).get_window_coordinates()) < 15:
-                return
+                if Utilities.get_euclidean_distance((new_x, new_y), self.controller.get_other_anchor(self).get_window_coordinates()) < 15:
+                    return
 
-            # Apply the move.
-            self.setGeometry(new_x, new_y, self.width(), self.height())
-            self.x = new_x
-            self.y = new_y
+                # Apply the move.
+                self.setGeometry(new_x, new_y, self.width(), self.height())
+                self.x = new_x
+                self.y = new_y
 
-            self.controller.fix_anchor_world_coordinates()
-            
-            # Update plot limits
-            self.controller.update_limits()
+                self.controller.fix_anchor_world_coordinates()
+                
+                # Update plot limits
+                self.controller.update_limits()
         super(Anchor, self).mouseMoveEvent(event)
 
     def get_window_coordinates(self):

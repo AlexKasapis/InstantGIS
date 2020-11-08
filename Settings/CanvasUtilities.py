@@ -101,12 +101,7 @@ def zoom_limits(x_lim, y_lim, x_zoom, y_zoom, zoom_modifier):
         xlim_perc = (new_xlim1 - new_xlim0) / (x_lim[1] - x_lim[0])
         new_ylim0 = y_lim[0] - ((y_lim[1] - y_lim[0]) * xlim_perc - (y_lim[1] - y_lim[0])) / 2
         new_ylim1 = y_lim[1] + ((y_lim[1] - y_lim[0]) * xlim_perc - (y_lim[1] - y_lim[0])) / 2
-        if 10 <= new_xlim1 - new_xlim0 <= 360 and 5 <= new_ylim1 - new_ylim0 <= 180:
-            return [new_xlim0, new_xlim1], [new_ylim0, new_ylim1]
-        else:
-            return x_lim, y_lim
     else:
         new_ylim0 = y_lim[0] - y_zoom * zoom_modifier
         new_ylim1 = y_lim[1] + y_zoom * zoom_modifier
-        return [new_xlim0, new_xlim1] if 10 <= new_xlim1 - new_xlim0 <= 360 else x_lim, \
-                [new_ylim0, new_ylim1] if 5 <= new_ylim1 - new_ylim0 <= 180 else y_lim
+    return [new_xlim0, new_xlim1], [new_ylim0, new_ylim1]
