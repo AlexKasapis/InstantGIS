@@ -1,0 +1,73 @@
+=======================
+0. Note
+=======================
+Python runs using the help of certain libraries.
+In order to run most python applications you must have those libraries installed on your computer.
+The installation process is required to take place once, before running the program.
+Updating the program will not require any more of this work.
+
+
+======================
+1. Install Python
+======================
+a. Download the latest version of the python installer from: www.python.org/downloads/
+*Keep in mind the version of python you install. It will be important later.
+
+b. Download the installer and run it.
+* Be sure to add python to PATH, when prompted and install for all users.
+
+
+=======================
+2. Install pip
+=======================
+Pip is a package manager helper for python.
+
+a. Go to the following link: bootstrap.pypa.io/get-pip.py
+b. Save the file/site as get-pip.py
+c. Using a terminal, execute the command: python /path/to/file/get-pip.py
+d. Update pip executing the command: pip install --upgrade pip
+
+
+================================
+3. Install required libraries.
+================================
+InstantGIS uses the power of certain libraries written in python.
+In order to run the application, those libraries must be installed on your computer.
+
+a. Install PyQt5
+In a terminal, run the following command: pip install --user pyqt5
+
+b. Install matplotlib
+In a terminal, run the following command: pip install --user matplotlib
+
+c. Install some windows related libraries
+In a terminal, run the following command: pip install --user pypiwin32
+
+
+d. Install geopandas.
+Geopandas is a little trickier but the last step towards running the application.
+You will need to manually install 2 library packages: gdal and fiona.
+Install them in this order.
+
+== gdal
+Download the correct file from: www.lfd.uci.edu/~gohlke/pythonlibs/#gdal
+The file you want to download depends on (a) the python version you installed and (b).
+For example GDAL‑3.1.4‑cp37‑cp37m‑win_amd64.whl works for python version 3.7 and on 64bit computers.
+You probably use a 64bit computer so look for files containing win_amd64 instead of win32.
+After downloading the file, install it using the following command in a terminal:
+pip install --user ~/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl
+The last piece of data, ~/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl, specifies which file to install, so be sure to enter the path right.
+
+== fiona
+Download the correct file from: www.lfd.uci.edu/~gohlke/pythonlibs/#fiona
+Install the file using the command: pip install --user ~/Downloads/Fiona-1.8.17-cp38-cp38-win_amd64.whl
+
+== geopandas
+Now you are free to install geopandas, executing the following command:
+pip install --user geopandas
+
+
+=======================
+4. End
+=======================
+You are ready to run the application.
