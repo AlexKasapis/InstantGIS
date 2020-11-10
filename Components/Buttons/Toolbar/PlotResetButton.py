@@ -16,7 +16,8 @@ class ResetButton(QPushButton):
         self.setIconSize(QSize(30, 30))
         self.setStyleSheet('''
             background-color: #323232;
-            border: 0px;''')
+            border: 0px;
+            border-radius: 7px;''')
 
         # Connections
         self.clicked.connect(self.button_clicked)
@@ -34,13 +35,15 @@ class ResetButton(QPushButton):
         self.controller.set_footer_description('Reset {}'.format('plot view' if self.controller.free_map_mode else 'path'))
         self.setStyleSheet('''
         background-color: #555555;
-        border: 0px''')
+        border: 0px;
+        border-radius: 7px;''')
 
     def leaveEvent(self, event):
         self.controller.set_footer_description('')
         self.setStyleSheet('''
         background-color: #323232;
-        border: 0px''')
+        border: 0px;
+        border-radius: 7px;''')
 
     def mousePressEvent(self, event):
         super(ResetButton, self).mousePressEvent(event)

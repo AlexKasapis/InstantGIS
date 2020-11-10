@@ -14,7 +14,8 @@ class HelpButton(QPushButton):
         self.setIconSize(QSize(30, 30))
         self.setStyleSheet('''
             background-color: #323232;
-            border: 0px;''')
+            border: 0px;
+            border-radius: 7px;''')
 
         # Connections
         self.clicked.connect(self.button_clicked)
@@ -29,13 +30,15 @@ class HelpButton(QPushButton):
         self.controller.set_footer_description('Display the Help window')
         self.setStyleSheet('''
         background-color: #555555;
-        border: 0px''')
+        border: 0px;
+        border-radius: 7px;''')
 
     def leaveEvent(self, event):
         self.controller.set_footer_description('')
         self.setStyleSheet('''
         background-color: #323232;
-        border: 0px''')
+        border: 0px;
+        border-radius: 7px;''')
 
     def mousePressEvent(self, event):
         super(HelpButton, self).mousePressEvent(event)

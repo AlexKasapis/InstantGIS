@@ -1,8 +1,11 @@
 from matplotlib import lines
+from PyQt5.QtWidgets import QDesktopWidget, QFileDialog
 from Settings import Utilities
 from Settings import ResizeUtilities
 from Settings import CanvasUtilities
 from Components.PathPoint import PathPoint
+from Components.ExportMenu import ExportMenu
+from Components.MessageDialog import MessageDialog
 
 
 class MainController():
@@ -165,8 +168,18 @@ class MainController():
     def show_about_us_window(self):
         print('Beep boop... it\'s us..!')
 
-    def show_export_menu(self):
-        print([(i+1, self.current_path[i].lon, self.current_path[i].lat) for i in range(len(self.current_path))])
+    def show_export_menu(self, x, y):
+        if len(self.current_path) > 0:
+            export_menu = ExportMenu(x, y)
+            export_menu.accepted.connect(self.export)
+            export_menu.exec_()
+        else:
+            message_dialog = MessageDialog('There is no path to export.')
+            message_dialog.setParent(self.main_window)
+            w = self.main_window.width()
+            h = self.main_window.height()
+            message_dialog.setGeometry(w / 2 - 250 / 2, h / 2 - 90 / 2, 250, 90)
+            message_dialog.exec_()
 
     def toggle_plot_mode(self):
         self.free_map_mode = not self.free_map_mode
@@ -202,3 +215,28 @@ class MainController():
             self.current_path[i] = None
         self.current_path = []
         self.redraw_path()
+
+    def export(self, export_info):
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.AnyFile)
+
+        if file_dialog.exec_():
+            file_path = str(file_dialog.selectedFiles()[0])
+
+            if export_info['export_type'] == 'new_csv':
+                output = '0#' + '#'.join(['{}~{}'.format(point.lon, point.lat) for point in self.current_path]) + '\n'
+                f = open(file_path, "w")
+                f.write(output)
+                f.close()
+            elif export_info['export_type'] == 'append_csv':
+                output = '0#' + '#'.join(['{}~{}'.format(point.lon, point.lat) for point in self.current_path]) + '\n'
+                f = open(file_path, "a")
+                f.write(output)
+                f.close()
+            elif export_info['export_type'] == 'new_excel':
+                pass
+            elif export_info['export_type'] == 'append_excel':
+                pass
+
+            if export_info['reset_path']:
+                self.reset_path()

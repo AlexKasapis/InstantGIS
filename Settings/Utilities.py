@@ -19,18 +19,6 @@ def screen_width():
 def screen_height():
     return screen_size()[1]
 
-def window_position():
-    return win32gui.GetWindowRect(None)[:2]
-
-def window_size():
-    return win32gui.GetWindowRect(None)[3:]
-
-def window_width():
-    return window_size()[0]
-
-def window_height():
-    return window_size()[1]
-
 # Keep a number within a certain range.
 def clamp(n, nmin, nmax):
     return min(nmax, max(n, nmin))
