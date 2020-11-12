@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLabel
+from Components.LineInput import LineInput
 
 
 class AnchorMenu(QDialog):
@@ -57,13 +58,13 @@ class AnchorMenu(QDialog):
 
         self.lon_label = QLabel('Longitude')
         
-        self.longitude_input = QLineEdit()
+        self.longitude_input = LineInput()
         self.longitude_input.setText(str(lon))
         self.longitude_input.textEdited[str].connect(self.unlock)
 
         self.lat_label = QLabel('Latitude')
 
-        self.latitude_input = QLineEdit()
+        self.latitude_input = LineInput()
         self.latitude_input.setText(str(lat))
         self.latitude_input.textEdited[str].connect(self.unlock)
 
@@ -84,6 +85,7 @@ class AnchorMenu(QDialog):
         layout.addWidget(self.cancel_button, 2, 1)
         
         self.move(x, y)
+        self.longitude_input.selectAll()
 
     def unlock(self, text):
         if self.are_inputs_valid():
