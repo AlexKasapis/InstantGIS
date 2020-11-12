@@ -73,8 +73,8 @@ class ExportMenu(QDialog):
         self.reset_path_checkbox.setChecked(True)
         self.cancel_button = QPushButton('Cancel')
         
-        self.export_csv_button.clicked.connect(self.export_csv_pressed)
         self.export_shapefile_button.clicked.connect(self.export_shapefile_pressed)
+        self.export_csv_button.clicked.connect(self.export_csv_pressed)
         self.cancel_button.clicked.connect(self.cancel_pressed)
 
         self.set_button_status()
@@ -85,26 +85,31 @@ class ExportMenu(QDialog):
         self.setLayout(layout)
         layout.addWidget(self.id_label, 0, 0)
         layout.addWidget(self.id_input, 0, 1)
-        layout.addWidget(self.export_csv_button, 1, 0, 1, 2)
-        layout.addWidget(self.export_shapefile_button, 2, 0, 1, 2)
+        layout.addWidget(self.export_shapefile_button, 1, 0, 1, 2)
+        layout.addWidget(self.export_csv_button, 2, 0, 1, 2)
         layout.addWidget(self.reset_path_checkbox, 3, 0, 1, 2)
         layout.addWidget(self.cancel_button, 4, 0, 1, 2)
         
         self.move(x, y)
 
     def set_button_status(self):
-        is_enabled = len(self.id_input.text()) > 0
+        is_enabled = False
+        try:
+            int(self.id_input.text())
+            is_enabled = True
+        except ValueError:
+            pass
         self.export_csv_button.setEnabled(is_enabled)
         self.export_shapefile_button.setEnabled(is_enabled)
         self.reset_path_checkbox.setEnabled(is_enabled)
 
-    def export_csv_pressed(self):
-        values = {'export_type': 'csv', 'path_id': self.id_input.text(), 'reset_path': self.reset_path_checkbox.isChecked()}
+    def export_shapefile_pressed(self):
+        values = {'export_type': 'shapefile', 'path_id': self.id_input.text(), 'reset_path': self.reset_path_checkbox.isChecked()}
         self.accepted.emit(values)
         self.accept()
 
-    def export_shapefile_pressed(self):
-        values = {'export_type': 'shapefile', 'path_id': self.id_input.text(), 'reset_path': self.reset_path_checkbox.isChecked()}
+    def export_csv_pressed(self):
+        values = {'export_type': 'csv', 'path_id': self.id_input.text(), 'reset_path': self.reset_path_checkbox.isChecked()}
         self.accepted.emit(values)
         self.accept()
 

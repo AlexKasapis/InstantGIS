@@ -1,3 +1,4 @@
+import shapefile
 from matplotlib import lines
 from PyQt5.QtWidgets import QDesktopWidget, QFileDialog
 from Settings import Utilities
@@ -229,7 +230,11 @@ class MainController():
                 f.write(output)
                 f.close()
             elif export_info['export_type'] == 'shapefile':
-                pass
+                w = shapefile.Writer(file_path, shapeType=shapefile.POLYLINE)
+                w.field('name', 'C')
+                w.line([[[point.lon, point.lat] for point in self.current_path]])
+                w.record(int(export_info['path_id']))
+                w.close()
 
             if export_info['reset_path']:
                 self.reset_path()

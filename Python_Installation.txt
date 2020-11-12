@@ -93,6 +93,9 @@ c. Install some windows related libraries
 d. Install geopandas
 	In a terminal, run the following command: pip install --user geopandas
 
+e. Install PyShp
+	In a terminal, run the following command: pip install --user pyshp
+
 
 
 =======================
