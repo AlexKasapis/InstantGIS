@@ -1,20 +1,25 @@
 =======================
-0. Note
+0. Notes
 =======================
 Python runs using the help of certain libraries.
 In order to run most python applications you must have those libraries installed on your computer.
 The installation process is required to take place once, before running the program.
-Updating the program will not require any more of this work.
+Updating the program will NOT require to follow the installation steps again.
+
+This guide assumes any file you are required to download is placed under the Downloads folder in the C drive.
+If this is not the case, any paths used in this guide should be changed accordingly.
+
 
 
 ======================
 1. Install Python
 ======================
 a. Download the latest version of the python installer from: www.python.org/downloads/
-*Keep in mind the version of python you install. It will be important later.
+* Keep in mind the version of python you install. It will be important later.
 
 b. Download the installer and run it.
-* Be sure to add python to PATH, when prompted and install for all users.
+* Be sure to add python to PATH when prompted and install for all users.
+
 
 
 =======================
@@ -23,51 +28,76 @@ b. Download the installer and run it.
 Pip is a package manager helper for python.
 
 a. Go to the following link: bootstrap.pypa.io/get-pip.py
-b. Save the file/site as get-pip.py
-c. Using a terminal, execute the command: python /path/to/file/get-pip.py
-d. Update pip executing the command: pip install --upgrade pip
+
+b. Save the file/site as get-pip.py 
+* Right click on the web page and click 'Save As', then save the file with the default name under the downloads folter.
+
+c. Using a terminal, execute the command: python C:/Users/[your_user_name]/Downloads/get-pip.py
+* To open a terminal search for 'cmd' in the Windows start menu.
+
+d1. Update pip executing the command: pip install --upgrade pip
+d2. Update setuptools executing the command: pip install --upgrade setuptools
+
+
+
+===================================
+3. Install libraries preparation
+===================================
+Some python libraries we are going to install do not require additional work. This is not the case for all of them.
+Here we will do some preparation work in order to have the ability to install the required libraries to run the application.
+Step (a) takes some time. You are free to go through with (b) and (c) while waiting for the download to complete.
+
+a. Install c++ build tools
+	Make sure you have the latest c++ build tools on your computer. This step is required to install the matplotlib library.
+	1. Go to www.visualstudio.microsoft.com/visual-cpp-build-tools
+	2. Click the Download Build Tools button
+	3. Open the downloaded file.
+	4. From the opened window, select the 'C++ build tools option' and deselect all the optional features from the frame on the right.
+	5. Click install. Once installed make sure to restart your computer.
+
+b. Install gdal
+	GDAL is a library required to install the matplotlib python library.
+	1. Go to www.lfd.uci.edu/~gohlke/pythonlibs/#gdal
+	2. Download the correct file from the list. The file you want to download depends on the python version you installed and your CPU type.
+	   For example GDAL-3.1.4-cp37-cp37m-win_amd64.whl works for python version 3.7 and on 64bit computers.
+	   You are probably using a 64bit computer so look for files containing win_amd64 instead of win32.
+	3. Install the file using the following command in a terminal:
+	   pip install --user C:/Users/[your_user_name]/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl
+	   * Change the filename depending on which file you downloaded.
+
+c. Install fiona
+	Fiona is another library required by matplotlib.
+	1. Go to www.lfd.uci.edu/~gohlke/pythonlibs/#fiona
+	2. Download the correct file from the list, in the same way you downloaded the gdal file.
+	3. Install the file using the command in a terminal:
+	   pip install --user C:/Users/[your_user_name]/Downloads/Fiona-1.8.17-cp38-cp38-win_amd64.whl
+	   * Change the filename depending on which file you downloaded.
+
 
 
 ================================
 3. Install required libraries.
 ================================
-InstantGIS uses the power of certain libraries written in python.
+InstantGIS makes use of certain libraries written in python.
 In order to run the application, those libraries must be installed on your computer.
 
 a. Install PyQt5
-In a terminal, run the following command: pip install --user pyqt5
+	In a terminal, run the following command: pip install --user pyqt5
 
 b. Install matplotlib
-In a terminal, run the following command: pip install --user matplotlib
+	In a terminal, run the following command: pip install --user matplotlib
 
 c. Install some windows related libraries
-In a terminal, run the following command: pip install --user pypiwin32
+	In a terminal, run the following command: pip install --user pypiwin32
 
+d. Install geopandas
+	In a terminal, run the following command: pip install --user geopandas
 
-d. Install geopandas.
-Geopandas is a little trickier but the last step towards running the application.
-You will need to manually install 2 library packages: gdal and fiona.
-Install them in this order.
-
-== gdal
-Download the correct file from: www.lfd.uci.edu/~gohlke/pythonlibs/#gdal
-The file you want to download depends on (a) the python version you installed and (b).
-For example GDAL‑3.1.4‑cp37‑cp37m‑win_amd64.whl works for python version 3.7 and on 64bit computers.
-You probably use a 64bit computer so look for files containing win_amd64 instead of win32.
-After downloading the file, install it using the following command in a terminal:
-pip install --user ~/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl
-The last piece of data, ~/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl, specifies which file to install, so be sure to enter the path right.
-
-== fiona
-Download the correct file from: www.lfd.uci.edu/~gohlke/pythonlibs/#fiona
-Install the file using the command: pip install --user ~/Downloads/Fiona-1.8.17-cp38-cp38-win_amd64.whl
-
-== geopandas
-Now you are free to install geopandas, executing the following command:
-pip install --user geopandas
 
 
 =======================
 4. End
 =======================
 You are ready to run the application.
+To run the application, run the 'InstantGIS.bat' file from the InstantGIS directory.
+* Don't close the terminal that appears while executing the .bat file, as it closes the application itself.
