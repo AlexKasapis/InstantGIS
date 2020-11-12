@@ -26,7 +26,7 @@ def convert_window_to_world(figure_canvas, x, y):
     dist_lon = x * (xlim[1] - xlim[0]) / plot_width
     dist_lat = y * (ylim[1] - ylim[0]) / plot_height
 
-    return (int(xlim[0] + dist_lon), int(ylim[1] - dist_lat))
+    return (float("{:.3f}".format(xlim[0] + dist_lon)), float("{:.3f}".format(ylim[1] - dist_lat)))
 
 # Update the plot limits depending on the position of the anchors.
 def update_plot_limits(figure_canvas, anchors):

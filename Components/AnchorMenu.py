@@ -94,7 +94,10 @@ class AnchorMenu(QDialog):
             self.ok_button.setDisabled(True)
 
     def ok_pressed(self):
-        values = {'Longitude': int(self.longitude_input.text()), 'Latitude': int(self.latitude_input.text())}
+        values = {
+            'Longitude': float("{:.3f}".format(float(self.longitude_input.text()))), 
+            'Latitude': float("{:.3f}".format(float(self.latitude_input.text())))
+        }
         self.accepted.emit(values)
         self.accept()
 
@@ -103,8 +106,8 @@ class AnchorMenu(QDialog):
 
     def are_inputs_valid(self):
         try: 
-            lon = int(self.longitude_input.text())
-            lat = int(self.latitude_input.text())
+            lon = float(self.longitude_input.text())
+            lat = float(self.latitude_input.text())
             return -180 <= lon <= 180 and -90 <= lat <= 90
         except ValueError:
             return False
