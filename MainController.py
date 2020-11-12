@@ -205,7 +205,7 @@ class MainController():
         for i in range(len(self.current_path) - 1):
             p1 = self.current_path[i]
             p2 = self.current_path[i + 1]
-            lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color='#D66355'))
+            lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color='#3771DE'))
         self.map_canvas.figure.lines = lines_list
         CanvasUtilities.redraw_plot(self.map_canvas, self)
 

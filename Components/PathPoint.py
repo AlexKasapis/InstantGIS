@@ -24,7 +24,7 @@ class PathPoint(QPushButton):
         self.setGeometry(self.x - 2, self.y - 2, 4, 4) 
         self.setStyleSheet("""  
             background-color: #D66355;
-            border-radius: 1; 
+            border-radius: 2; 
             border: 0px;
             """)
 
