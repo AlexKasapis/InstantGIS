@@ -223,19 +223,12 @@ class MainController():
         if file_dialog.exec_():
             file_path = str(file_dialog.selectedFiles()[0])
 
-            if export_info['export_type'] == 'new_csv':
-                output = '0#' + '#'.join(['{}~{}'.format(point.lon, point.lat) for point in self.current_path]) + '\n'
-                f = open(file_path, "w")
-                f.write(output)
-                f.close()
-            elif export_info['export_type'] == 'append_csv':
-                output = '0#' + '#'.join(['{}~{}'.format(point.lon, point.lat) for point in self.current_path]) + '\n'
+            if export_info['export_type'] == 'csv':
+                output = '{}#'.format(export_info['path_id']) + '#'.join(['{}~{}'.format(point.lon, point.lat) for point in self.current_path]) + '\n'
                 f = open(file_path, "a")
                 f.write(output)
                 f.close()
-            elif export_info['export_type'] == 'new_excel':
-                pass
-            elif export_info['export_type'] == 'append_excel':
+            elif export_info['export_type'] == 'shapefile':
                 pass
 
             if export_info['reset_path']:
