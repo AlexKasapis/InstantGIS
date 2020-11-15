@@ -1,3 +1,4 @@
+import os
 import shapefile
 from matplotlib import lines
 from PyQt5.QtWidgets import QDesktopWidget, QFileDialog
@@ -230,11 +231,27 @@ class MainController():
                 f.write(output)
                 f.close()
             elif export_info['export_type'] == 'shapefile':
-                w = shapefile.Writer(file_path, shapeType=shapefile.POLYLINE)
-                w.field('name', 'C')
-                w.line([[[point.lon, point.lat] for point in self.current_path]])
-                w.record(int(export_info['path_id']))
-                w.close()
+                # Insert previous data.
+                lines = []
+                records = []
+                if os.path.exists(file_path):
+                    with shapefile.Reader(file_path) as existing_data:
+                        for i in range(len(existing_data.shapes())):
+                            lines.append(existing_data.shape(i))
+                            records.append(existing_data.record(i))
+
+                with shapefile.Writer(file_path, shapeType=shapefile.POLYLINE) as w:
+                    w.field('name', 'C')
+
+                    for i in range(len(lines)):
+                        line = lines[i]
+                        record = records[i]
+                        w.line([[[point[0], point[1]] for point in line.points]])  
+                        w.record(record[0])
+                    
+                    # Insert new path
+                    w.line([[[point.lon, point.lat] for point in self.current_path]])
+                    w.record(export_info['path_id'])
 
             if export_info['reset_path']:
                 self.reset_path()

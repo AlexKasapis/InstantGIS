@@ -93,12 +93,7 @@ class ExportMenu(QDialog):
         self.move(x, y)
 
     def set_button_status(self):
-        is_enabled = False
-        try:
-            int(self.id_input.text())
-            is_enabled = True
-        except ValueError:
-            pass
+        is_enabled = len(self.id_input.text()) > 0
         self.export_csv_button.setEnabled(is_enabled)
         self.export_shapefile_button.setEnabled(is_enabled)
         self.reset_path_checkbox.setEnabled(is_enabled)
