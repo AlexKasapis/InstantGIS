@@ -32,8 +32,9 @@ a. Go to the following link: bootstrap.pypa.io/get-pip.py
 b. Save the file/site as get-pip.py 
 * Right click on the web page and click 'Save As', then save the file with the default name under the downloads folter.
 
-c. Using a terminal, execute the command: python C:/Users/[your_user_name]/Downloads/get-pip.py
+c. Using a terminal, execute the command: python C:/Users/your_user_name/Downloads/get-pip.py
 * To open a terminal search for 'cmd' in the Windows start menu.
+* Replace 'your_user_name' with your actual user name.
 
 d1. Update pip executing the command: pip install --upgrade pip
 d2. Update setuptools executing the command: pip install --upgrade setuptools
@@ -48,6 +49,9 @@ Here we will do some preparation work in order to have the ability to install th
 Step (a) takes some time. You are free to go through with (b) and (c) while waiting for the download to complete.
 
 a. Install c++ build tools
+	* You might not need to do this if you have them already installed on your computer.
+	* Try to run the command to install matplotlib: pip install --user matplotlib
+	* If no errors occur, you can skip this step and move to 3b.
 	Make sure you have the latest c++ build tools on your computer. This step is required to install the matplotlib library.
 	1. Go to www.visualstudio.microsoft.com/visual-cpp-build-tools
 	2. Click the Download Build Tools button
@@ -62,7 +66,7 @@ b. Install gdal
 	   For example GDAL-3.1.4-cp37-cp37m-win_amd64.whl works for python version 3.7 and on 64bit computers.
 	   You are probably using a 64bit computer so look for files containing win_amd64 instead of win32.
 	3. Install the file using the following command in a terminal:
-	   pip install --user C:/Users/[your_user_name]/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl
+	   pip install --user C:/Users/your_user_name/Downloads/GDAL-3.1.4-cp38-cp38-win_amd64.whl
 	   * Change the filename depending on which file you downloaded.
 
 c. Install fiona
@@ -70,7 +74,7 @@ c. Install fiona
 	1. Go to www.lfd.uci.edu/~gohlke/pythonlibs/#fiona
 	2. Download the correct file from the list, in the same way you downloaded the gdal file.
 	3. Install the file using the command in a terminal:
-	   pip install --user C:/Users/[your_user_name]/Downloads/Fiona-1.8.17-cp38-cp38-win_amd64.whl
+	   pip install --user C:/Users/your_user_name/Downloads/Fiona-1.8.17-cp38-cp38-win_amd64.whl
 	   * Change the filename depending on which file you downloaded.
 
 
@@ -85,6 +89,7 @@ a. Install PyQt5
 	In a terminal, run the following command: pip install --user pyqt5
 
 b. Install matplotlib
+	* You don't need to do this if you installed matplotlib during step 3a.
 	In a terminal, run the following command: pip install --user matplotlib
 
 c. Install some windows related libraries
