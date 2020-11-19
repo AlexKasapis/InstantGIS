@@ -11,7 +11,7 @@ from Settings import CanvasUtilities
 
 class MapCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, controller, parent, dpi):
+    def __init__(self, controller, map_file, parent, dpi):
 
         self.controller = controller
         self.controller.map_canvas = self
@@ -59,7 +59,7 @@ class MapCanvas(FigureCanvasQTAgg):
             ]
 
         # Load data file.
-        self.world = geopandas.read_file('./Resources/MapData/coastline.geojson')
+        self.world = geopandas.read_file('./Resources/MapData/{}'.format(map_file))
         #self.drop_resolution(2, 5)
         # self.world = world.to_crs(epsg=3857)  # Web Mercator
         self.world.plot(ax=self.axes, color='black', linewidth=1)

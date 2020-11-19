@@ -1,4 +1,5 @@
 import os
+import geopandas
 import shapefile
 from matplotlib import lines
 from PyQt5.QtWidgets import QDesktopWidget, QFileDialog
@@ -8,6 +9,8 @@ from Settings import CanvasUtilities
 from Components.PathPoint import PathPoint
 from Components.ExportMenu import ExportMenu
 from Components.MessageDialog import MessageDialog
+from Components.OptionsMenu import OptionsMenu
+from Components.MapCanvas import MapCanvas
 
 
 class MainController():
@@ -17,10 +20,13 @@ class MainController():
         # UI References
         self.main_window = None
         self.anchors = []
+        self.gis_frame = None
         self.map_canvas = None
         self.current_path = []
         self.free_map_mode = True
         self.footer = None
+
+        self.map_file_index = 1
 
     def get_window_min_width(self):
         return Utilities.window_min_width
@@ -183,6 +189,10 @@ class MainController():
             message_dialog.setGeometry(w / 2 - 250 / 2, h / 2 - 90 / 2, 250, 90)
             message_dialog.exec_()
 
+    def show_options_window(self, x, y):
+        options_menu = OptionsMenu(x, y, self)
+        options_menu.exec_()
+
     def toggle_plot_mode(self):
         self.free_map_mode = not self.free_map_mode
         self.footer.update_mode_label()
@@ -255,3 +265,19 @@ class MainController():
 
             if export_info['reset_path']:
                 self.reset_path()
+
+    def reset_map(self, map_detail):
+        map_files = [
+            'ne_110m_coastline.geojson',
+            'ne_50m_coastline.geojson',
+            'ne_10m_coastline.geojson'
+        ]
+
+        self.map_file_index = map_detail
+        
+        self.gis_frame.layout().removeWidget(self.gis_frame.map_canvas)
+        self.gis_frame.map_canvas.deleteLater()
+        self.gis_frame.map_canvas = None
+        self.gis_frame.map_canvas = MapCanvas(controller=self, map_file=map_files[self.map_file_index], parent=self.gis_frame, dpi=self.gis_frame.dpi)
+        self.gis_frame.layout().addWidget(self.gis_frame.map_canvas)
+        #self.gis_frame.map_canvas.figure.clear()

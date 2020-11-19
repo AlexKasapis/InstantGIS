@@ -6,6 +6,7 @@ from Components.Buttons.Toolbar.PlotModeButton import PlotModeButton
 from Components.Buttons.Toolbar.ExportButton import ExportButton
 from Components.Buttons.Toolbar.HelpButton import HelpButton
 from Components.Buttons.Toolbar.AboutUsButton import AboutUsButton
+from Components.Buttons.Toolbar.OptionsButton import OptionsButton
 
 
 class Toolbar(QFrame):
@@ -28,5 +29,6 @@ class Toolbar(QFrame):
         layout.addWidget(ExportButton(self, controller))
         layout.addWidget(ResetButton(self, controller))
         layout.addStretch(1)
+        layout.addWidget(OptionsButton(self, controller))
         layout.addWidget(HelpButton(self, controller))
         layout.addWidget(AboutUsButton(self, controller))

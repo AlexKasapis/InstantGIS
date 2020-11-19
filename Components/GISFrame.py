@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
-from Components.MapCanvas import MapCanvas
 from Settings import CanvasUtilities
+from Components.MapCanvas import MapCanvas
 
 
 class GISFrame(QWidget):
@@ -14,6 +14,7 @@ class GISFrame(QWidget):
         QWidget.__init__(self, *args, **kwargs)
         
         self.controller = controller
+        self.controller.gis_frame = self
 
         self.setAutoFillBackground(True)
         color = QColor("gray")
@@ -23,16 +24,16 @@ class GISFrame(QWidget):
         self.setPalette(palette)
         
         self.dpi = QGuiApplication.primaryScreen().physicalDotsPerInch()
-        self.map_canvas = MapCanvas(controller=self.controller, parent=self, dpi=self.dpi)
-        self.toolbar = NavigationToolbar2QT(parent=self, canvas=self.map_canvas)
-        self.toolbar.hide()
+        self.map_canvas = QWidget()
 
         layout = QVBoxLayout()
         layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.toolbar)
         layout.addWidget(self.map_canvas)
         self.setLayout(layout)
+
+        # Load the map on 1 - Medium resolution [0 1 2]
+        self.controller.reset_map(1)
 
     def fit_to_frame(self, new_width, new_height):
         # Set the size of the widget
