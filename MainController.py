@@ -72,8 +72,8 @@ class MainController():
         # Calculate the move distance for X and Y separately, depending on their zoom level.
         x_lim = self.map_canvas.axes.get_xlim()
         y_lim = self.map_canvas.axes.get_ylim()
-        x_modifier = 0.015 + ((x_lim[1] - x_lim[0]) - 10) / 800
-        y_modifier = 0.015 + ((y_lim[1] - y_lim[0]) - 5) / 600
+        x_modifier = max(0.005, ((x_lim[1] - x_lim[0]) - 10) / 800)
+        y_modifier = max(0.005, ((y_lim[1] - y_lim[0]) - 5) / 600)
         move_dist = [dist.x() * x_modifier, dist.y() * y_modifier]
 
         # Move the plot limits.
@@ -92,13 +92,18 @@ class MainController():
         # Move the plot limits.
         x_lim = self.map_canvas.axes.get_xlim()
         y_lim = self.map_canvas.axes.get_ylim()
-        x_modifier = 0.015 + ((x_lim[1] - x_lim[0]) - 10) / 300
-        y_modifier = 0.015 + ((y_lim[1] - y_lim[0]) - 5) / 200
+        x_modifier = max(0.02, ((x_lim[1] - x_lim[0]) - 10) / 300)
+        y_modifier = max(0.02, ((y_lim[1] - y_lim[0]) - 5) / 200)
         
         new_xlim, new_ylim = CanvasUtilities.zoom_limits(
             x_lim, y_lim,
             -dist[0] * x_modifier, -dist[1] * (x_modifier if dist[0] == dist[1] else y_modifier), 
             0.5)
+
+        # Zoom limit
+        if new_xlim[1] - new_xlim[0] <= 1 or new_ylim[1] - new_ylim[0] <= 1:
+            return
+
         self.map_canvas.axes.set_xlim(new_xlim[0], new_xlim[1])
         self.map_canvas.axes.set_ylim(new_ylim[0], new_ylim[1])
 
