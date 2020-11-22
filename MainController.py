@@ -26,7 +26,9 @@ class MainController():
         self.free_map_mode = True
         self.footer = None
 
-        self.map_file_index = 1
+        self.map_file_index = 1  # Default -- Medium resolution
+        self.path_color_index = 0  # Default -- Red/Blue
+        self.point_size_index = 1  # Default -- Medium
 
     def get_window_min_width(self):
         return Utilities.window_min_width
@@ -218,11 +220,12 @@ class MainController():
         self.redraw_path()
 
     def redraw_path(self):
+        colors = ['#2143E0', '#F51BEB']
         lines_list = []
         for i in range(len(self.current_path) - 1):
             p1 = self.current_path[i]
             p2 = self.current_path[i + 1]
-            lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color='#3771DE'))
+            lines_list.append(lines.Line2D([p1.x, p2.x], [self.map_canvas.height() - p1.y, self.map_canvas.height() - p2.y], color=colors[self.path_color_index]))
         self.map_canvas.figure.lines = lines_list
         CanvasUtilities.redraw_plot(self.map_canvas, self)
 
@@ -271,7 +274,7 @@ class MainController():
             if export_info['reset_path']:
                 self.reset_path()
 
-    def reset_map(self, map_detail):
+    def reset_map(self, map_detail, keep_coordinates=False):
         map_files = [
             'ne_110m_coastline.geojson',
             'ne_50m_coastline.geojson',
@@ -279,10 +282,44 @@ class MainController():
         ]
 
         self.map_file_index = map_detail
+
+        if keep_coordinates:
+            xlim = self.map_canvas.axes.get_xlim()
+            ylim = self.map_canvas.axes.get_ylim()
         
         self.gis_frame.layout().removeWidget(self.gis_frame.map_canvas)
         self.gis_frame.map_canvas.deleteLater()
         self.gis_frame.map_canvas = None
         self.gis_frame.map_canvas = MapCanvas(controller=self, map_file=map_files[self.map_file_index], parent=self.gis_frame, dpi=self.gis_frame.dpi)
         self.gis_frame.layout().addWidget(self.gis_frame.map_canvas)
-        #self.gis_frame.map_canvas.figure.clear()
+
+        for point in self.current_path:
+            # Get the required info
+            x = point.x
+            y = point.y
+            index = self.current_path.index(point)
+
+            # Remove the old point
+            self.gis_frame.layout().removeWidget(point)
+            point.deleteLater()
+            point = None
+
+            # Inser the new point
+            self.current_path[index] = PathPoint((x, y), CanvasUtilities.convert_window_to_world(self.map_canvas, x, y), self, parent=self.map_canvas)
+
+        if keep_coordinates:
+            self.map_canvas.axes.set_xlim(xlim[0], xlim[1])
+            self.map_canvas.axes.set_ylim(ylim[0], ylim[1])
+            CanvasUtilities.redraw_plot(self.map_canvas, self)
+            self.redraw_path()
+
+    def change_path_color(self, color_index):
+        self.path_color_index = color_index
+        for path_point in self.current_path:
+            path_point.reset_visuals()
+        self.redraw_path()
+
+    def change_point_size(self, size_index):
+        self.point_size_index = size_index
+        for path_point in self.current_path:
+            path_point.reset_visuals()

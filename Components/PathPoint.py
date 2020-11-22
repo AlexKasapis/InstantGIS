@@ -21,12 +21,8 @@ class PathPoint(QPushButton):
         self.is_anchor_dragged = False
         self.mouse_click_rel_pos = None
         
-        self.setGeometry(self.x - 2, self.y - 2, 4, 4) 
-        self.setStyleSheet("""  
-            background-color: #D66355;
-            border-radius: 2; 
-            border: 0px;
-            """)
+        # Set the geometry, shape and color of the point object.
+        self.reset_visuals()
 
         self.setMouseTracking(True)
         self.setCursor(QCursor(Qt.PointingHandCursor))
@@ -79,3 +75,15 @@ class PathPoint(QPushButton):
     @staticmethod
     def get_point_diff(p1, p2):
         return p2.x() - p1.x(), p2.y() - p1.y()
+
+    def reset_visuals(self):
+        colors = ['#C7371E', '#02D444']
+        sizes = [5, 6, 7]
+        radius_sizes = [2, 3, 3]
+
+        size = sizes[self.controller.point_size_index]
+        color = colors[self.controller.path_color_index]
+        border_radius = radius_sizes[self.controller.point_size_index]
+
+        self.setGeometry(self.x - int(size / 2), self.y - int(size / 2), size, size) 
+        self.setStyleSheet('background-color: {}; border-radius: {}; border: 0px;'.format(color, border_radius))
