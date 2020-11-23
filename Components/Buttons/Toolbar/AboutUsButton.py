@@ -27,7 +27,7 @@ class AboutUsButton(QPushButton):
         self.controller.show_about_us_window()
 
     def enterEvent(self, event):
-        self.controller.set_footer_description('Display the About Us window')
+        self.controller.set_footer_description('About InstantGIS')
         self.setStyleSheet('''
         background-color: #555555;
         border: 0px;

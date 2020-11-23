@@ -11,11 +11,15 @@ from Components.ExportMenu import ExportMenu
 from Components.MessageDialog import MessageDialog
 from Components.OptionsMenu import OptionsMenu
 from Components.MapCanvas import MapCanvas
+from Components.AboutUsWindow import AboutUsWindow
 
 
 class MainController():
 
     def __init__(self, *args, **kwargs):
+
+        # Application version
+        self.version = '1.0.0'
         
         # UI References
         self.main_window = None
@@ -181,7 +185,12 @@ class MainController():
         print('Beep boop... showing help...')
 
     def show_about_us_window(self):
-        print('Beep boop... it\'s us..!')
+        about_us_window = AboutUsWindow(self)
+        about_us_window.setParent(self.main_window)
+        w = self.main_window.width()
+        h = self.main_window.height()
+        about_us_window.setGeometry(w / 2 - 400 / 2, h / 2 - 350 / 2, 400, 350)
+        about_us_window.exec_()
 
     def show_export_menu(self, x, y):
         if len(self.current_path) > 0:
