@@ -71,16 +71,16 @@ class MainController():
     # Event handling panning the plot. Panning slides the plot limits linearly.
     # Panning also changes the anchors' lon/lat values, because they remain in the same x/y window positions.
     def plot_pan(self, dist):
-        # Calculate the move distance for X and Y separately, depending on their zoom level.
-        x_lim = self.map_canvas.axes.get_xlim()
-        y_lim = self.map_canvas.axes.get_ylim()
-        x_modifier = max(0.005, ((x_lim[1] - x_lim[0]) - 10) / 800)
-        y_modifier = max(0.005, ((y_lim[1] - y_lim[0]) - 5) / 600)
-        move_dist = [dist.x() * x_modifier, dist.y() * y_modifier]
+        xlim = self.map_canvas.axes.get_xlim()
+        ylim = self.map_canvas.axes.get_ylim()
+
+        # Translate the mouse move distance to world coordinate sizes.
+        x_move_world = dist.x() * (xlim[1] - xlim[0]) / self.map_canvas.width()
+        y_move_world = dist.y() * (ylim[1] - ylim[0]) / self.map_canvas.height()
 
         # Move the plot limits.
-        self.map_canvas.axes.set_xlim(x_lim[0] - move_dist[0], x_lim[1] - move_dist[0])
-        self.map_canvas.axes.set_ylim(y_lim[0] + move_dist[1], y_lim[1] + move_dist[1])
+        self.map_canvas.axes.set_xlim(xlim[0] - x_move_world, xlim[1] - x_move_world)
+        self.map_canvas.axes.set_ylim(ylim[0] + y_move_world, ylim[1] + y_move_world)
 
         # Update anchor coordinates.
         self.anchors_snap_to_window()
