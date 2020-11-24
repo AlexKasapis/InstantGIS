@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QCursor, QPainter, QColor
+from PyQt5.QtGui import QCursor, QPainter, QColor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QGridLayout
 from MainController import MainController
 from Components.Header import Header
@@ -14,10 +14,12 @@ class MainWindow(QMainWindow):
     def __init__(self, controller, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         
+
         self.controller = controller
         self.controller.main_window = self
 
         self.setWindowTitle('InstantGIS')
+        self.setWindowIcon(QIcon('Resources/Icons/application_icon.png')) 
         self.setMinimumSize(QSize(self.controller.get_window_min_width(), self.controller.get_window_min_height()))
 
         # Make background transparent

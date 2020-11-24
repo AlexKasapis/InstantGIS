@@ -19,7 +19,7 @@ class MainController():
     def __init__(self, *args, **kwargs):
 
         # Application version
-        self.version = '1.0.0'
+        self.version = '0.4.0'
         
         # UI References
         self.main_window = None

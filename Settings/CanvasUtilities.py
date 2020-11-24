@@ -55,15 +55,6 @@ def update_plot_limits(figure_canvas, anchors):
     figure_canvas.axes.set_ylim([y_lim2, y_lim1])  
 
 def redraw_plot(figure_canvas, controller):
-
-    # if len(controller.current_path) > 1:
-    #     controller.map_canvas.painter = QPainter(controller.map_canvas)
-    #     controller.map_canvas.painter.begin(controller.map_canvas)
-    #     controller.map_canvas.painter.setPen(QColor('#D66355'))
-    #     for i in range(len(controller.current_path) - 1):
-    #         controller.map_canvas.painter.drawLine(controller.current_path[i].x, controller.current_path[i].y, controller.current_path[i + 1].x, controller.current_path[i + 1].y)
-    #     controller.map_canvas.painter.end()
-
     figure_canvas.figure.canvas.draw()
     figure_canvas.figure.canvas.flush_events()
 

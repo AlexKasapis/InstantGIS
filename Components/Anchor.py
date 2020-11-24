@@ -48,7 +48,6 @@ class Anchor(QPushButton):
         self.controller.update_limits()
 
     def enterEvent(self, event):
-        self.controller.set_footer_description('Anchor at ({}x, {}y) -> ({}°, {}°). Drag or click to set coordinates.'.format(self.x, self.y, self.lon, self.lat))
         super(Anchor, self).enterEvent(event)
 
     def leaveEvent(self, event):

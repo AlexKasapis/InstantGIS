@@ -28,7 +28,6 @@ class PathPoint(QPushButton):
         self.setCursor(QCursor(Qt.PointingHandCursor))
 
     def enterEvent(self, event):
-        self.controller.set_footer_description('Path point at ({}x, {}y) -> ({}°, {}°). Left click to drag, right click to remove.'.format(self.x, self.y, self.lon, self.lat))
         super(PathPoint, self).enterEvent(event)
 
     def leaveEvent(self, event):

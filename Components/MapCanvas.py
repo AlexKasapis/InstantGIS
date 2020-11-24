@@ -3,6 +3,8 @@ from PyQt5.QtGui import QColor, QPainter
 from matplotlib.figure import Figure
 from matplotlib import lines
 import geopandas
+import matplotlib
+matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from Components.Anchor import Anchor
 from Components.AnchorMenu import AnchorMenu
@@ -12,6 +14,8 @@ from Settings import CanvasUtilities
 class MapCanvas(FigureCanvasQTAgg):
 
     def __init__(self, controller, map_file, parent, dpi):
+
+        matplotlib.rcParams["axes.axisbelow"] = False
 
         self.controller = controller
         self.controller.map_canvas = self
@@ -45,8 +49,8 @@ class MapCanvas(FigureCanvasQTAgg):
         # Plot axes visuals.
         self.axes.grid(color='black', alpha=0.2)
         self.axes.tick_params(axis='both', which='both', length=0, labeltop=True, labelright=True)
-        self.axes.tick_params(axis="y", labelcolor='#428071', direction="in", pad=-22)
-        self.axes.tick_params(axis="x", labelcolor='#428071', direction="in", pad=-10)
+        self.axes.tick_params(axis="y", labelcolor='#C7371E', direction="in", pad=-22)
+        self.axes.tick_params(axis="x", labelcolor='#C7371E', direction="in", pad=-10)
         self.axes.spines["left"].set_visible(False)
         self.axes.spines["top"].set_visible(False)
         self.axes.spines["right"].set_visible(False)
