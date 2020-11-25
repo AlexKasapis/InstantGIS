@@ -12,6 +12,7 @@ from Components.MessageDialog import MessageDialog
 from Components.OptionsMenu import OptionsMenu
 from Components.MapCanvas import MapCanvas
 from Components.AboutUsWindow import AboutUsWindow
+from Components.HelpWindow import HelpWindow
 
 
 class MainController():
@@ -182,7 +183,12 @@ class MainController():
         CanvasUtilities.redraw_plot(self.map_canvas, self)
 
     def show_help_window(self):
-        print('Beep boop... showing help...')
+        help_window = HelpWindow(self)
+        help_window.setParent(self.main_window)
+        w = self.main_window.width()
+        h = self.main_window.height()
+        help_window.setGeometry(w / 2 - 600 / 2, h / 2 - 400 / 2, 600, 400)
+        help_window.exec_()
 
     def show_about_us_window(self):
         about_us_window = AboutUsWindow(self)
